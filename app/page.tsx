@@ -1,20 +1,12 @@
-import { useSession } from "next-auth/react";
-import LoginButton from "../components/LoginButton";
-import LogoutButton from "../components/LogoutButton";
+import { auth } from "../auth";
 
-export default function Home() {
-  const { data: session } = useSession();
+export default async function Home() {
+  const session = await auth();
+  if (!session) return <div>Not authenticated</div>;
 
   return (
     <div>
-      {session && session.user ? (
-        <>
-          <p>Welcome, {session.user.name}</p>
-          <LogoutButton />
-        </>
-      ) : (
-        <LoginButton />
-      )}
+      <pre>{JSON.stringify(session, null, 2)}</pre>
     </div>
   );
 }
