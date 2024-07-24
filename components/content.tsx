@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 const loadComponent = (componentName: string) => {
   switch (componentName) {
     case "new":
-      return dynamic(() => import("../new/page"), {
+      return dynamic(() => import("./new"), {
         loading: () => <p>Loading Component New...</p>,
       });
     default:

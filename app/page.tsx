@@ -1,5 +1,5 @@
 import { auth } from "../auth";
-import Content from '../components/content/page'
+import Content from '../components/content'
 import { Session } from "next-auth";
 
 export default async function Home() {
