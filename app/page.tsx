@@ -54,7 +54,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="flex-grow">
+      <div className="content-height">
         <Content></Content>
       </div>
     </div>
