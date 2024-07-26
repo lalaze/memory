@@ -58,7 +58,7 @@ const Editor = ({ editorRef, ...props }: any) => {
     setIsMounted(true);
   }, []);
 
-  return <div id="editorjs" className="editor w-full overflow-y-scroll"></div>;
+  return <div id="editorjs" className="editor w-full overflow-y-scroll pl-[20px]"></div>;
 };
 
 export default Editor;
