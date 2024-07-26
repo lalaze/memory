@@ -11,16 +11,17 @@ type paramsProps = {
 export async function POST(req: NextRequest, { params }: { params: paramsProps }) {
     await dbConnect();
 
-    const title = params.title;
-    const content = params.content
+    const body = await req.json()
+
+    console.log('backup', getNextDay(1))
 
     const c = new cards({
-        title,
-        content,
+        title: body.title,
+        content: body.content,
         time: 1,
-        newDay: getNextDay(1)
+        nextDay: getNextDay(1)
     })
-    await c.save()
+    await c.save()   
 
     return NextResponse.json({
         success: true

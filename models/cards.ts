@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface Cards extends Document {
-  content: string;
+  content: Map<string, any>;
   title: string;
   nextDay: string; // 'YYYY-MM-DD'
   time: number; // 复习次数
@@ -9,11 +9,13 @@ export interface Cards extends Document {
 
 const CardsSchema = new Schema<Cards>({
   content: {
-    type: String,
-    required: [true, "Content is required"]
+    type: Map,
+    required: [true, "Content is required"],
+    of: Schema.Types.Mixed
   },
   title: {
     type: String,
+    index: true,
     required: [true, "Title is required"]
   },
   nextDay: {
