@@ -9,6 +9,7 @@ import {
   SetStateAction,
 } from "react";
 import { Cards } from "../models/cards";
+import { signOut } from "next-auth/react"
 import { Session } from "next-auth";
 
 interface GlobalState {
@@ -28,6 +29,10 @@ export default function View({ session }: { session: Session }) {
     setCard(null)
     setComponentName(name);
   };
+
+  const handleSignOut = () => {
+    signOut()
+  }
 
   return (
     <div className="bg-zinc-900 flex flex-col h-screen">
@@ -90,17 +95,14 @@ export default function View({ session }: { session: Session }) {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              <li>
+              {/* <li>
                 <a className="justify-between">
                   Profile
                   <span className="badge">New</span>
                 </a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
+              </li> */}
+              <li onClick={handleSignOut}>
+                <a>Sign out</a>
               </li>
             </ul>
           </div>
