@@ -8,18 +8,24 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import { Cards } from "../models/cards";
 import { Session } from "next-auth";
 
 interface GlobalState {
   componentName: string;
   setComponentName: Dispatch<SetStateAction<string>>;
+  card: Cards | null;
+  setCard: Dispatch<SetStateAction<Cards | null>>;
 }
 
 const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
 
 export default function View({ session }: { session: Session }) {
   const [componentName, setComponentName] = useState("new");
+  const [card, setCard] = useState<Cards | null>(null);
+
   const handleClick = (name: string) => {
+    setCard(null)
     setComponentName(name);
   };
 
@@ -102,7 +108,7 @@ export default function View({ session }: { session: Session }) {
       </div>
       <div className="content-height">
         <GlobalStateContext.Provider
-          value={{ componentName, setComponentName }}
+          value={{ componentName, setComponentName, card, setCard }}
         >
           <Content></Content>
         </GlobalStateContext.Provider>

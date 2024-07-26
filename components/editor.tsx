@@ -19,42 +19,40 @@ import { useGlobalState } from "./view";
 
 const Editor = ({ editorRef, ...props }: any) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [editor, setEditor ] = useState<any>(null)
-  const { componentName } = useGlobalState();
-
-  const someSaveMethod = () => {
-    // 这里是你的保存逻辑
-    console.log("Editor save method called");
-  };
+  const [editor, setEditor] = useState<any>(null);
+  const { componentName, card } = useGlobalState();
 
   useImperativeHandle(editorRef, () => ({
     editor,
-    someSaveMethod,
   }));
 
   useEffect(() => {
     if (!isMounted) return;
-    const editor = new EditorJS({
-        holder: "editorjs",
-        readOnly: componentName === 'read',
-        tools: {
-          header: Header,
-          image: SimpleImage,
-          list: List,
-          checklist: Checklist,
-          quote: Quote,
-          warning: Warning,
-          marker: Marker,
-          code: CodeTool,
-          delimiter: Delimiter,
-          inlineCode: InlineCode,
-          linkTool: LinkTool,
-          embed: Embed,
-          table: Table,
-        },
-      });
-      setEditor(editor)
-  }, [isMounted]);
+    const config: any = {
+      holder: "editorjs",
+      readOnly: componentName === "read",
+      tools: {
+        header: Header,
+        image: SimpleImage,
+        list: List,
+        checklist: Checklist,
+        quote: Quote,
+        warning: Warning,
+        marker: Marker,
+        code: CodeTool,
+        delimiter: Delimiter,
+        inlineCode: InlineCode,
+        linkTool: LinkTool,
+        embed: Embed,
+        table: Table,
+      }
+    };
+    if (card?.content) {
+        config.data = card?.content
+    }
+    const editor = new EditorJS(config);
+    setEditor(editor);
+  }, [isMounted, card]);
 
   useEffect(() => {
     setIsMounted(true);

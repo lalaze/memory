@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import showToast from "./toast";
+import { Cards } from "../models/cards";
 import { fetchWrapper } from "../utils/api";
+import { useGlobalState } from './view'
 
 const List = () => {
   const [listValue, setListValue] = useState([]);
+  const { setComponentName, setCard } = useGlobalState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,41 +21,37 @@ const List = () => {
     fetchData();
   }, []);
 
+  const handleEditClick = (o: Cards) => {
+    setComponentName('edit')
+    setCard(o)
+  }
+
   return (
-    <div>
-      <div className="overflow-x-auto">
+    <div className="flex justify-center align-top">
+      <div className="overflow-x-auto mt-6 w-5/6 h-5/6">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
+              <th className="w-2"></th>
+              <th>Title</th>
+              <th className="w-32">Next Day</th>
+              <th className="w-24">Review Time</th>
+              <th className="w-24"></th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            <tr>
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-            </tr>
-            {/* row 2 */}
-            <tr className="hover">
-              <th>2</th>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>Purple</td>
-            </tr>
-            {/* row 3 */}
-            <tr>
-              <th>3</th>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>Red</td>
-            </tr>
+            {listValue.map((item: Cards, i) => (
+              <tr key={i} className="hover:bg-base-100">
+                <th>{i + 1}</th>
+                <td>{item.title}</td>
+                <td>{item.nextDay}</td>
+                <td>{item.time}</td>
+                <td className="flex">
+                  <button className="btn btn-square btn-ghost bg-edit-icon bg-contain btn-xs mr-2 cursor-pointer" onClick={() => handleEditClick(item)}></button>
+                  <button className="btn btn-square btn-ghost bg-delte-icon bg-contain btn-xs cursor-pointer"></button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -60,4 +59,4 @@ const List = () => {
   );
 };
 
-export default List
+export default List;

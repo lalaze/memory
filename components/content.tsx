@@ -8,12 +8,16 @@ const loadComponent = (componentName: string) => {
   switch (componentName) {
     case "new":
       return dynamic(() => import("./new"), {
-        loading: () => <p>Loading Component New...</p>,
+        loading: () => <p></p>,
       });
     case "list":
       return dynamic(() => import("./list"), {
-        loading: () => <p>Loading Component New...</p>,
+        loading: () => <p></p>,
       });
+    case "edit":
+        return dynamic(() => import("./new"), {
+          loading: () => <p></p>,
+        });
     default:
       return null;
   }

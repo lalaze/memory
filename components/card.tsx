@@ -11,9 +11,9 @@ const ForwardedEditor = forwardRef((props, ref) => (
 ));
 
 const Card = () => {
-  // const { componentName, setComponentName } = useGlobalState();
+  const { card } = useGlobalState();
   const editorRef = useRef<any>(null);
-  const [titleValue, setTitleValue] = useState("新卡片");
+  const [titleValue, setTitleValue] = useState(card?.title || "新卡片");
 
   const handleClickSave = async () => {
     if (editorRef.current && editorRef.current.editor) {
