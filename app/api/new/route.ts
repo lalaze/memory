@@ -13,11 +13,12 @@ export async function POST(req: NextRequest, { params }: { params: paramsProps }
 
     const body = await req.json()
 
-    console.log('backup', getNextDay(1))
+    console.log('backup', body.email)
 
     const c = new cards({
         title: body.title,
         content: body.content,
+        email: body.email,
         time: 1,
         nextDay: getNextDay(1)
     })

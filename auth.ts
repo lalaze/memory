@@ -24,6 +24,7 @@ export const authConfig = {
     pages: {
         signIn: "/auth/login",
     },
+    session: { strategy: "jwt" },
     callbacks: {
         authorized: async ({ auth, request }) => {
             // Logged in users are authenticated, otherwise redirect to login page

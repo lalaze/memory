@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface Cards extends Document {
   content: Map<string, any>;
   title: string;
+  email: string;
   nextDay: string; // 'YYYY-MM-DD'
   time: number; // 复习次数
 }
@@ -12,6 +13,11 @@ const CardsSchema = new Schema<Cards>({
     type: Map,
     required: [true, "Content is required"],
     of: Schema.Types.Mixed
+  },
+  email: {
+    type: String,
+    index: true,
+    required: [true, "email is required"],
   },
   title: {
     type: String,

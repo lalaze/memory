@@ -11,7 +11,7 @@ const ForwardedEditor = forwardRef((props, ref) => (
 ));
 
 const Card = () => {
-  const { card } = useGlobalState();
+  const { card, session } = useGlobalState();
   const editorRef = useRef<any>(null);
   const [titleValue, setTitleValue] = useState(card?.title || "新卡片");
 
@@ -23,12 +23,13 @@ const Card = () => {
         body: JSON.stringify({
           title: titleValue,
           content: data,
+          email: session.user?.email
         }),
       });
       if (res.success) {
         setTitleValue('新卡片')
         editorRef.current.editor.clear();
-        showToast("保存成功", "success");
+        showToast("save success", "success");
       }
     } else {
       showToast("发生错误", "error");

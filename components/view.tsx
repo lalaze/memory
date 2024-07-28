@@ -17,6 +17,7 @@ interface GlobalState {
   setComponentName: Dispatch<SetStateAction<string>>;
   card: Cards | null;
   setCard: Dispatch<SetStateAction<Cards | null>>;
+  session: Session;
 }
 
 const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
@@ -110,7 +111,7 @@ export default function View({ session }: { session: Session }) {
       </div>
       <div className="content-height">
         <GlobalStateContext.Provider
-          value={{ componentName, setComponentName, card, setCard }}
+          value={{ componentName, setComponentName, card, setCard, session }}
         >
           <Content></Content>
         </GlobalStateContext.Provider>
