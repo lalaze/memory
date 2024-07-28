@@ -52,7 +52,7 @@ const Card = () => {
         />
         <ForwardedEditor ref={editorRef} />
         <button
-          className="btn btn-primary w-36 absolute text-white right-6 bottom-6"
+          className="btn btn-primary w-36 absolute text-white right-6 bottom-6 z-10"
           onClick={handleClickSave}
         >
           Save

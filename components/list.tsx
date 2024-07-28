@@ -6,11 +6,11 @@ import { useGlobalState } from './view'
 
 const List = () => {
   const [listValue, setListValue] = useState([]);
-  const { setComponentName, setCard } = useGlobalState();
+  const { setComponentName, setCard, session } = useGlobalState();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetchWrapper("/api/cards");
+      const res = await fetchWrapper(`/api/cards?email=${session.user?.email}`)
       if (res.success) {
         setListValue(res.data);
       } else {

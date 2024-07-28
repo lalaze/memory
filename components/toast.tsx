@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 const showToast = (message: string, type: string) => {
   const options = {
     position: "top-right" as ToastPosition,
-    hideProgressBar: true
+    // hideProgressBar: true
   };
 
   switch (type) {

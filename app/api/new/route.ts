@@ -8,7 +8,7 @@ type paramsProps = {
     content: string
 }
 
-export async function POST(req: NextRequest, { params }: { params: paramsProps }) {
+export async function POST(req: NextRequest) {
     await dbConnect();
 
     const body = await req.json()
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest, { params }: { params: paramsProps }
 
     const c = new cards({
         title: body.title,
-        content: body.content,
+        content: JSON.stringify(body.content),
         email: body.email,
         time: 1,
         nextDay: getNextDay(1)

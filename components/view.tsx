@@ -4,11 +4,13 @@ import Content from "./content";
 import {
   useState,
   useContext,
+  useEffect,
   createContext,
   Dispatch,
   SetStateAction,
 } from "react";
 import { Cards } from "../models/cards";
+import { fetchWrapper } from "../utils/api";
 import { signOut } from "next-auth/react"
 import { Session } from "next-auth";
 
@@ -25,6 +27,7 @@ const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
 export default function View({ session }: { session: Session }) {
   const [componentName, setComponentName] = useState("new");
   const [card, setCard] = useState<Cards | null>(null);
+  const [searchValue, setSearchValue] = useState('');
 
   const handleClick = (name: string) => {
     setCard(null)
@@ -34,6 +37,38 @@ export default function View({ session }: { session: Session }) {
   const handleSignOut = () => {
     signOut()
   }
+
+  useEffect(() => {
+    if (searchValue) {
+      const fetchData = async () => {
+        try {
+          const res = await fetchWrapper("/api/search", {
+            method: "POST",
+            body: JSON.stringify({
+              content: searchValue,
+            }),
+          });
+          console.log('zeze', res)
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    }
+  }, [searchValue]);
+
+  const handleInputChange = (event: { target: { value: any; }; }) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleKeyPress = (event: {
+    target: any; key: string;
+  }) => {
+    if (event.key === 'Enter') {
+      setSearchValue(event.target.value);
+    }
+  };
+
 
   return (
     <div className="bg-zinc-900 flex flex-col h-screen">
@@ -74,6 +109,8 @@ export default function View({ session }: { session: Session }) {
           <input
             type="text"
             placeholder="Search Card"
+            onBlur={handleInputChange}
+            onKeyPress={handleKeyPress}
             className="input input-bordered w-full"
           />
         </div>
