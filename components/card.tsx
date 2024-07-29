@@ -21,7 +21,7 @@ const Card = (params: Params) => {
 
   const handleClick = async () => {
     if (componentName === 'review' && params.onNewCard) {
-      const res = await fetchWrapper(`/api/review?id=${card?._id}`)
+      const res = await fetchWrapper(`/api/review?id=${card?._id}&email=${session.user?.email}`)
       if (res.success) {
         params.onNewCard(true)
       }
@@ -33,7 +33,8 @@ const Card = (params: Params) => {
           body: JSON.stringify({
             title: titleValue,
             content: data,
-            id: card?._id
+            id: card?._id,
+            email: session.user?.email
           }),
         });
         if (res.success) {

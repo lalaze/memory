@@ -1,22 +1,25 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "../../../utils/db";
 import mongoose from 'mongoose';
+import { checkUser } from '@/utils/api';
 import cards from "../../../models/cards";
 
-type paramsProps = {
-    id: string
-    title: string
-    content: string
-}
-
 export async function POST(req: NextRequest) {
-    await dbConnect();
-
     const body = await req.json()
 
     const id = body.id;
     const title = body.title;
     const content = body.content
+    const email = body.email
+
+    if (!(await checkUser(email))) {
+      return NextResponse.json({
+        success: false,
+        message: 'illegal user'
+      });
+    }
+
+    await dbConnect();
 
     await cards.findByIdAndUpdate(new mongoose.Types.ObjectId(id), {
         title: title,

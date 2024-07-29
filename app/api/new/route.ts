@@ -1,25 +1,32 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "../../../utils/db";
-import { getNextDay } from '../../../utils/time'
+import { getNextDay } from '../../../utils/time';
+import { checkUser } from '@/utils/api';
 import cards from "../../../models/cards";
 
-type paramsProps = {
-    title: string
-    content: string
-}
-
 export async function POST(req: NextRequest) {
-    await dbConnect();
-
     const body = await req.json()
+
+    const email = body.email
+
+    if (!(await checkUser(email))) {
+      return NextResponse.json({
+        success: false,
+        message: 'illegal user'
+      });
+    }
+
+    await dbConnect();
 
     const c = new cards({
         title: body.title,
         content: JSON.stringify(body.content),
-        email: body.email,
+        email,
         time: 1,
         nextDay: getNextDay(1)
     })
+
+
     await c.save()   
 
     return NextResponse.json({

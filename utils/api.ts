@@ -1,3 +1,5 @@
+import { auth } from '../auth'
+
 export const fetchWrapper = async (url: string, options = {}) => {
     try {
       const response = await fetch(url, options);
@@ -17,3 +19,8 @@ export const fetchWrapper = async (url: string, options = {}) => {
       throw error; // 或者返回一个自定义的错误对象
     }
   };
+
+  export const checkUser = async (email: string) => {
+    const session = await auth()
+    return session?.user?.email === email
+  }

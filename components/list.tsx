@@ -7,6 +7,7 @@ import { useGlobalState } from './view'
 const List = () => {
   const [listValue, setListValue] = useState([]);
   const { setComponentName, setCard, session, searchValue } = useGlobalState();
+  const [showValue, setShowValue] = useState(false)
 
   const fetchData = async () => {
     if (searchValue) {
@@ -31,6 +32,7 @@ const List = () => {
         showToast("Failed to fetch data", "error");
       }
     }
+    setShowValue(true)
   };
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const List = () => {
   }
 
   const handleDeleteClick = async (o: Cards) => {
-    const res = await fetchWrapper(`/api/delete?id=${o._id}`)
+    const res = await fetchWrapper(`/api/delete?id=${o._id}&email=${session.user?.email}`)
     if (res.success) {
       fetchData()
       showToast('delete Success', 'success')
@@ -52,7 +54,7 @@ const List = () => {
 
   return (
     <div className="flex justify-center align-top">
-      <div className="overflow-x-auto mt-6 w-5/6 h-5/6">
+      {showValue ? <div className="overflow-x-auto mt-6 w-5/6 h-5/6">
         <table className="table">
           <thead>
             <tr>
@@ -79,7 +81,7 @@ const List = () => {
           </tbody>
         </table>
         {listValue.length === 0 && <div className="text-base text-nowrap m-auto text-center mt-52 font-table">no Data</div>}
-      </div>
+      </div> : ''}
     </div>
   );
 };
