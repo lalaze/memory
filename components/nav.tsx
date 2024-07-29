@@ -4,11 +4,13 @@ import { fetchWrapper } from "@/utils/api";
 import { useGlobalState } from "./view";
 
 const Nav = () => {
-  const [searchValue, setSearchValue] = useState('');
-  const { handleClick, session } = useGlobalState();
+
+  const { handleClick, session, setSearchValue, searchValue } = useGlobalState();
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleInputChange = (event: { target: { value: any; }; }) => {
     setSearchValue(event.target.value);
+    handleClick("list")
   };
 
   const handleKeyPress = (event: {
@@ -16,6 +18,7 @@ const Nav = () => {
   }) => {
     if (event.key === 'Enter') {
       setSearchValue(event.target.value);
+      handleClick("list")
     }
   };
 
@@ -23,29 +26,18 @@ const Nav = () => {
     signOut()
   }
 
-  useEffect(() => {
-    if (searchValue) {
-      const fetchData = async () => {
-        try {
-          const res = await fetchWrapper("/api/search", {
-            method: "POST",
-            body: JSON.stringify({
-              content: searchValue,
-            }),
-          });
-          console.log('zeze', res)
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-      fetchData();
-    }
-  }, [searchValue]);
+  const handleClickOpenUl = () => {
+    setIsVisible(true);
+  }
+
+  const handleClickCloseUl = () => {
+    setIsVisible(false);
+  }
 
   return <div className="navbar bg-base-100 justify-between flex-none">
     <div className="flex-none">
       <div className="dropdown mr-6">
-        <button className="btn btn-square btn-ghost" tabIndex={1}>
+        <button className="btn btn-square btn-ghost" tabIndex={1} onClick={handleClickOpenUl}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,17 +52,25 @@ const Nav = () => {
             ></path>
           </svg>
         </button>
-        <ul
+        { isVisible &&  <ul
           tabIndex={1}
           className="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
         >
           <li>
-            <a onClick={() => handleClick("new")}>New</a>
+            <a onClick={() => {
+              handleClickCloseUl()
+              handleClick("new")
+            }}>New</a>
           </li>
           <li>
-            <a onClick={() => handleClick("list")}>List</a>
+            <a onClick={() => {
+              setSearchValue('')
+              handleClick("list")
+              handleClickCloseUl()
+            }}>List</a>
           </li>
-        </ul>
+        </ul> }
+       
       </div>
       <a className="btn btn-ghost text-xl">Memory Card</a>
     </div>
@@ -78,8 +78,9 @@ const Nav = () => {
       <input
         type="text"
         placeholder="Search Card"
-        onBlur={handleInputChange}
+        onChange={handleInputChange}
         onKeyPress={handleKeyPress}
+        value={searchValue}
         className="input input-bordered w-full"
       />
     </div>

@@ -72,3 +72,7 @@ body {
 .content-height {
   height: calc(100% - 66px);
 }
+
+.font-table {
+  font-family: '__Inter_aaf875', '__Inter_Fallback_aaf875';
+}

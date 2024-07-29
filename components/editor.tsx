@@ -48,7 +48,7 @@ const Editor = ({ editorRef, ...props }: any) => {
       }
     };
     if (card?.content) {
-        config.data = card?.content
+        config.data = JSON.parse(card?.content)
     }
     const editor = new EditorJS(config);
     setEditor(editor);

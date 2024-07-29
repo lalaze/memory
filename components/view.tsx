@@ -20,12 +20,15 @@ interface GlobalState {
   handleClick: Function,
   setCard: Dispatch<SetStateAction<Cards | null>>;
   session: Session;
+  searchValue: string;
+  setSearchValue: Dispatch<SetStateAction<string>>;
 }
 
 const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
 
 export default function View({ session }: { session: Session }) {
   const [componentName, setComponentName] = useState("new");
+  const [searchValue, setSearchValue] = useState<string>('');
   const [card, setCard] = useState<Cards | null>(null);
 
   const handleClick = (name: string) => {
@@ -37,7 +40,7 @@ export default function View({ session }: { session: Session }) {
     <div className="bg-zinc-900 flex flex-col h-screen">
       {/* <pre>{JSON.stringify(session, null, 2)}</pre> */}
       <GlobalStateContext.Provider
-        value={{ componentName, setComponentName, card, setCard, session, handleClick }}
+        value={{ componentName, setComponentName, card, setCard, session, handleClick, searchValue, setSearchValue }}
       >
         <Nav></Nav>
         <div className="content-height">
