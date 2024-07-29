@@ -4,35 +4,63 @@ import { fetchWrapper } from "../utils/api";
 import showToast from "./toast";
 import { useGlobalState } from "./view";
 
+type Params = {
+  onNewCard?: Function
+}
+
 const Editor = dynamic(() => import("./editor"), { ssr: false });
 // eslint-disable-next-line react/display-name
 const ForwardedEditor = forwardRef((props, ref) => (
   <Editor {...props} editorRef={ref} />
 ));
 
-const Card = () => {
-  const { card, session } = useGlobalState();
+const Card = (params: Params) => {
+  const { card, session, componentName } = useGlobalState();
   const editorRef = useRef<any>(null);
   const [titleValue, setTitleValue] = useState(card?.title || "新卡片");
 
-  const handleClickSave = async () => {
-    if (editorRef.current && editorRef.current.editor) {
-      const data = await editorRef.current.editor.save();
-      const res = await fetchWrapper("/api/new", {
-        method: "POST",
-        body: JSON.stringify({
-          title: titleValue,
-          content: data,
-          email: session.user?.email
-        }),
-      });
+  const handleClick = async () => {
+    if (componentName === 'review' && params.onNewCard) {
+      const res = await fetchWrapper(`/api/review?id=${card?._id}`)
       if (res.success) {
-        setTitleValue('新卡片')
-        editorRef.current.editor.clear();
-        showToast("save success", "success");
+        params.onNewCard(true)
+      }
+    } else if (componentName === 'edit') {
+      if (editorRef.current && editorRef.current.editor) {
+        const data = await editorRef.current.editor.save();
+        const res = await fetchWrapper("/api/edit", {
+          method: "POST",
+          body: JSON.stringify({
+            title: titleValue,
+            content: data,
+            id: card?._id
+          }),
+        });
+        if (res.success) {
+          showToast("save success", "success");
+        }
+      } else {
+        showToast("error", "error");
       }
     } else {
-      showToast("发生错误", "error");
+      if (editorRef.current && editorRef.current.editor) {
+        const data = await editorRef.current.editor.save();
+        const res = await fetchWrapper("/api/new", {
+          method: "POST",
+          body: JSON.stringify({
+            title: titleValue,
+            content: data,
+            email: session.user?.email
+          }),
+        });
+        if (res.success) {
+          setTitleValue('新卡片')
+          editorRef.current.editor.clear();
+          showToast("save success", "success");
+        }
+      } else {
+        showToast("error", "error");
+      }
     }
   };
 
@@ -53,9 +81,9 @@ const Card = () => {
         <ForwardedEditor ref={editorRef} />
         <button
           className="btn btn-primary w-36 absolute text-white right-6 bottom-6 z-10"
-          onClick={handleClickSave}
+          onClick={handleClick}
         >
-          Save
+          {componentName === 'review' ? 'Finished' : 'Save'}
         </button>
       </div>
     </div>

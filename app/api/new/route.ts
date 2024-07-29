@@ -13,8 +13,6 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
 
-    console.log('backup', body.email)
-
     const c = new cards({
         title: body.title,
         content: JSON.stringify(body.content),

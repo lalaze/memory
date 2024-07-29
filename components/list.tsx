@@ -6,7 +6,7 @@ import { useGlobalState } from './view'
 
 const List = () => {
   const [listValue, setListValue] = useState([]);
-  const { setComponentName, setCard, session, searchValue, handleClick } = useGlobalState();
+  const { setComponentName, setCard, session, searchValue } = useGlobalState();
 
   const fetchData = async () => {
     if (searchValue) {
@@ -17,8 +17,9 @@ const List = () => {
             content: searchValue,
           }),
         });
-        setListValue(res.data);
-        console.log('zeze, search')
+        if (res.success) {
+          setListValue(res.data);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }

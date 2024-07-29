@@ -15,9 +15,13 @@ const loadComponent = (componentName: string) => {
         loading: () => <p></p>,
       });
     case "edit":
-        return dynamic(() => import("./new"), {
-          loading: () => <p></p>,
-        });
+      return dynamic(() => import("./edit"), {
+        loading: () => <p></p>,
+      });
+    case "review":
+      return dynamic(() => import("./review"), {
+        loading: () => <p></p>,
+      });
     default:
       return null;
   }

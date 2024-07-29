@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "../../../utils/db";
+import mongoose from 'mongoose';
 import cards from "../../../models/cards";
 
 type paramsProps = {
@@ -8,16 +9,18 @@ type paramsProps = {
     content: string
 }
 
-export async function POST(req: NextRequest, { params }: { params: paramsProps }) {
+export async function POST(req: NextRequest) {
     await dbConnect();
 
-    const id = params.id;
-    const title = params.title;
-    const content = params.content
+    const body = await req.json()
 
-    await cards.findByIdAndUpdate(id, {
+    const id = body.id;
+    const title = body.title;
+    const content = body.content
+
+    await cards.findByIdAndUpdate(new mongoose.Types.ObjectId(id), {
         title: title,
-        content: content
+        content: JSON.stringify(content)
     })
 
     return NextResponse.json({

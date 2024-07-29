@@ -69,6 +69,13 @@ const Nav = () => {
               handleClickCloseUl()
             }}>List</a>
           </li>
+          <li>
+            <a onClick={() => {
+              setSearchValue('')
+              handleClick("review")
+              handleClickCloseUl()
+            }}>Review</a>
+          </li>
         </ul> }
        
       </div>
