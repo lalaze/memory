@@ -30,5 +30,5 @@ npm run dev
 
 ```bash
 docker compose up -d # have mongodb
-docker compose -f docker-compose-noM.yaml up -d # 不带mongodb
+docker compose -f docker-compose-noM.yaml up -d # your mongodb
 ```
