@@ -10,5 +10,8 @@ export function getNextDay(time: number) {
         6: dayjs().add(10, 'day').format('YYYY-MM-DD'),
         7: dayjs().add(15, 'day').format('YYYY-MM-DD'),
     }
+    if (time > 8) {
+        return dayjs().add(15, 'day').format('YYYY-MM-DD')
+    }
     return nextMap[time]
 }
