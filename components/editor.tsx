@@ -12,7 +12,7 @@ import CodeTool from "@editorjs/code";
 import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import LinkTool from "@editorjs/link";
-import Embed from "@editorjs/Embed";
+import Embed from "@editorjs/embed";
 import Table from "@editorjs/table";
 import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { useGlobalState } from "./view";
