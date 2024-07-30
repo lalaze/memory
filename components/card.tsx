@@ -17,7 +17,7 @@ const ForwardedEditor = forwardRef((props, ref) => (
 const Card = (params: Params) => {
   const { card, session, componentName } = useGlobalState();
   const editorRef = useRef<any>(null);
-  const [titleValue, setTitleValue] = useState(card?.title || "新卡片");
+  const [titleValue, setTitleValue] = useState(card?.title || "new Card");
 
   const handleClick = async () => {
     if (componentName === 'review' && params.onNewCard) {
@@ -55,7 +55,7 @@ const Card = (params: Params) => {
           }),
         });
         if (res.success) {
-          setTitleValue('新卡片')
+          setTitleValue('new Card')
           editorRef.current.editor.clear();
           showToast("save success", "success");
         }
@@ -74,7 +74,7 @@ const Card = (params: Params) => {
       <div className="card-body h-full">
         <input
           type="text"
-          placeholder="新卡片"
+          placeholder="new Card"
           value={titleValue}
           onChange={handleChange}
           className="input bg-gray-300 w-full"
