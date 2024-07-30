@@ -1,7 +1,3 @@
-<h3 align="center">
-    Memory Card
-</h3>
-
 <h3 align="center">Memory Card</h3>
 
 <h3 align="center"><img width="756" style="border-radius:5px;" alt="demo" src="screen_shot.png"></h3>
