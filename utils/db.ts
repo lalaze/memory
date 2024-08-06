@@ -19,24 +19,31 @@ if (!cached) {
 
 async function dbConnect() {
   if (cached.conn) {
-    return cached.conn;
+    return { client: cached.conn, bucket: cached.bucket };
   }
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
     };
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
+      return {
+        client: mongoose,
+        bucket: new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+          bucketName: 'uploads',
+        }),
+      };
     });
   }
   try {
-    cached.conn = await cached.promise;
+    const { client, bucket } = await cached.promise;
+    cached.conn = client
+    cached.bucket = bucket
   } catch (e) {
     cached.promise = null;
     throw e;
   }
 
-  return cached.conn;
+  return { client: cached.conn, bucket: cached.bucket };
 }
 
 export default dbConnect;
