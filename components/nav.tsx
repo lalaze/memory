@@ -1,16 +1,21 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import { signOut } from "next-auth/react"
-import { fetchWrapper } from "@/utils/api";
 import { useGlobalState } from "./view";
+import { useAtom } from "jotai";
+import { showSession, showSearch } from "@/store";
 
 const Nav = () => {
 
-  const { handleClick, session, setSearchValue, searchValue } = useGlobalState();
+  // const { handleClick, setSearchValue, searchValue } = useGlobalState();
   const [isVisible, setIsVisible] = useState(false);
+  const [ session, setS ] = useAtom(showSession)
+  const [ searchValue, setSearchValue ] = useAtom(showSearch)
 
   const handleInputChange = (event: { target: { value: any; }; }) => {
     setSearchValue(event.target.value);
-    handleClick("list")
+    // handleClick("list")
   };
 
   const handleKeyPress = (event: {
@@ -18,7 +23,7 @@ const Nav = () => {
   }) => {
     if (event.key === 'Enter') {
       setSearchValue(event.target.value);
-      handleClick("list")
+      // handleClick("list")
     }
   };
 
@@ -59,20 +64,20 @@ const Nav = () => {
           <li>
             <a onClick={() => {
               handleClickCloseUl()
-              handleClick("new")
+              // handleClick("new")
             }}>New</a>
           </li>
           <li>
             <a onClick={() => {
               setSearchValue('')
-              handleClick("list")
+              // handleClick("list")
               handleClickCloseUl()
             }}>List</a>
           </li>
           <li>
             <a onClick={() => {
               setSearchValue('')
-              handleClick("review")
+              // handleClick("review")
               handleClickCloseUl()
             }}>Review</a>
           </li>

@@ -1,15 +1,18 @@
 import Card from "./card";
 import { useEffect, useState } from "react";
 import { fetchWrapper } from "../utils/api";
-import { useGlobalState } from './view'
+import { useGlobalState } from './view';
+import { showSession } from "@/store";
+import { useAtom } from "jotai";
 
 const New = () => {
-  const { setCard, card, session } = useGlobalState()
+  const { setCard, card } = useGlobalState()
+  const [ session, setS ] = useAtom(showSession)
   const [emptyValue, setEmptyValue] = useState(false)
   const [showValue, setShowValue] = useState(false)
 
   const fetchData = async (newCard: Boolean) => {
-    const res = await fetchWrapper(`/api/card?email=${session.user?.email}`)
+    const res = await fetchWrapper(`/api/card?email=${session?.user?.email}`)
     if (res.success && res.data && (!card || newCard)) {
       setCard(res.data)
     } else if (res.success && !res.data) {

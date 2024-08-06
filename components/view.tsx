@@ -10,8 +10,6 @@ import {
   SetStateAction,
 } from "react";
 import { Cards } from "../models/cards";
-import Nav from './nav'
-import { Session } from "next-auth";
 
 interface GlobalState {
   componentName: string;
@@ -19,16 +17,12 @@ interface GlobalState {
   card: Cards | null;
   handleClick: Function,
   setCard: Dispatch<SetStateAction<Cards | null>>;
-  session: Session;
-  searchValue: string;
-  setSearchValue: Dispatch<SetStateAction<string>>;
 }
 
 const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
 
-export default function View({ session }: { session: Session }) {
+export default function View() {
   const [componentName, setComponentName] = useState("new");
-  const [searchValue, setSearchValue] = useState<string>('');
   const [card, setCard] = useState<Cards | null>(null);
 
   const handleClick = (name: string) => {
@@ -40,9 +34,8 @@ export default function View({ session }: { session: Session }) {
     <div className="bg-zinc-900 flex flex-col h-screen">
       {/* <pre>{JSON.stringify(session, null, 2)}</pre> */}
       <GlobalStateContext.Provider
-        value={{ componentName, setComponentName, card, setCard, session, handleClick, searchValue, setSearchValue }}
+        value={{ componentName, setComponentName, card, setCard, handleClick }}
       >
-        <Nav></Nav>
         <div className="content-height">
           <Content></Content>
         </div>
