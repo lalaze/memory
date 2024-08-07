@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface Books extends Document {
   email: string;
   bookUrl: string;
+  type: string;
 }
 
 const BooksSchema = new Schema<Books>({
@@ -15,6 +16,11 @@ const BooksSchema = new Schema<Books>({
     type: String,
     index: true,
     required: [true, "bookId is required"]
+  },
+  type: {
+    type: String,
+    index: true,
+    required: [true, "type is required"]
   }
 });
 

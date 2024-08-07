@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "@/utils/db";
 import Book from '@/models/book'
+import { checkUser } from '@/utils/api';
+import { fileTypeFromBuffer } from 'file-type';
 import { Readable } from "stream";
 
 type paramsProps = {
@@ -8,12 +10,12 @@ type paramsProps = {
 }
 
 export async function POST(req: NextRequest) {
-
     const { bucket } = await dbConnect();
 
     const formData = await req.formData();
     let name;
     let book;
+    let type;
 
     for (const entries of Array.from(formData.entries())) {
         const [key, value] = entries;
@@ -24,15 +26,24 @@ export async function POST(req: NextRequest) {
         if (typeof value == "object") {
             book = Date.now() + value.name;
             const buffer = Buffer.from(await value.arrayBuffer());
+            type = (await fileTypeFromBuffer(buffer))?.mime
             const stream = Readable.from(buffer);
             const uploadStream = bucket.openUploadStream(book, {});
             await stream.pipe(uploadStream);
         }
     }
 
+    if (!(await checkUser(String(name)))) {
+        return NextResponse.json({
+            success: false,
+            message: 'illegal user'
+        });
+    }
+
     const newItem = new Book({
         email: name,
         bookUrl: book,
+        type: type
     });
 
     await newItem.save();
