@@ -7,7 +7,7 @@ type paramsProps = {
     content: string
 }
 
-export async function POST(req: NextRequest, { params }: { params: paramsProps }) {
+export async function POST(req: NextRequest) {
 
     const { bucket } = await dbConnect();
 
