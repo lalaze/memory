@@ -12,6 +12,7 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
     environment: 'jsdom',
-    env: process.env
+    env: process.env,
+    setupFiles: ['__tests__/setup.ts'],
   },
 })

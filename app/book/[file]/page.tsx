@@ -56,7 +56,6 @@ export default function Book() {
           setLocation(epubcfi);
         }}
         getRendition={(_rendition: Rendition) => {
-          console.log('zeze gg', _rendition)
           setRendition(_rendition);
         }}
       />
