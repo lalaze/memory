@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "@/utils/db";
 import Book from '@/models/book'
-import { checkUser } from '@/utils/api';
 import { fileTypeFromBuffer } from 'file-type';
 import { Readable } from "stream";
 
@@ -13,15 +12,11 @@ export async function POST(req: NextRequest) {
     const { bucket } = await dbConnect();
 
     const formData = await req.formData();
-    let name;
     let book;
     let type;
 
     for (const entries of Array.from(formData.entries())) {
         const [key, value] = entries;
-        if (key == "email") {
-            name = value;
-        }
 
         if (typeof value == "object") {
             book = Date.now() + value.name;
@@ -33,15 +28,8 @@ export async function POST(req: NextRequest) {
         }
     }
 
-    if (!(await checkUser(String(name)))) {
-        return NextResponse.json({
-            success: false,
-            message: 'illegal user'
-        });
-    }
-
     const newItem = new Book({
-        email: name,
+        email: req.headers.get('email'),
         bookUrl: book,
         type: type
     });

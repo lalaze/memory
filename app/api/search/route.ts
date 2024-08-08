@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "../../../utils/db";
 import cards from "../../../models/cards";
-import { checkUser } from '@/utils/api';
 
 type paramsProps = {
   content: string
@@ -13,15 +12,6 @@ export async function POST(req: NextRequest, { params }: { params: paramsProps }
   const body = await req.json()
 
   const c = body.content
-
-  const email = body.email
-
-  if (!(await checkUser(email))) {
-    return NextResponse.json({
-      success: false,
-      message: 'illegal user'
-    });
-  }
   
   await dbConnect();
 

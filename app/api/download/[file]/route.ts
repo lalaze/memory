@@ -1,23 +1,13 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "@/utils/db";
 import Book from '@/models/book'
-import { checkUser } from '@/utils/api';
 
 type paramsProps = {
     content: string
 }
 
 export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url);
-    const email = searchParams.get('email') || ''
-
-
-    if (!(await checkUser(email))) {
-        return NextResponse.json({
-            success: false,
-            message: 'illegal user'
-        });
-    }
+    const email = req.headers.get('email') || ''
 
     const { bucket } = await dbConnect();
 

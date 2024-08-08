@@ -1,6 +1,6 @@
 import View from "../components/view";
 
-export default async function Home() {
+export default function Home() {
   return (
     <div>
       <View></View>

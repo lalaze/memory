@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "../../../utils/db";
 import mongoose from 'mongoose';
-import { checkUser } from '@/utils/api';
 import cards from "../../../models/cards";
 
 export async function POST(req: NextRequest) {
@@ -10,14 +9,6 @@ export async function POST(req: NextRequest) {
     const id = body.id;
     const title = body.title;
     const content = body.content
-    const email = body.email
-
-    if (!(await checkUser(email))) {
-      return NextResponse.json({
-        success: false,
-        message: 'illegal user'
-      });
-    }
 
     await dbConnect();
 
