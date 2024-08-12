@@ -13,7 +13,7 @@ export const testBookId = '66b485f7e73db8ef1fade69d'
 
 const bucketName = 'uploads'
 
-const testFileName = 'alice.epub'
+export const testFileName = 'alice.epub'
 
 const testFilePath = path.resolve('__tests__/alice.epub')
 

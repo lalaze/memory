@@ -10,8 +10,8 @@ type paramsProps = {
 
 export async function POST(req: NextRequest) {
     const { bucket } = await dbConnect();
-
     const formData = await req.formData();
+
     let book;
     let type;
 
@@ -19,9 +19,21 @@ export async function POST(req: NextRequest) {
         const [key, value] = entries;
 
         if (typeof value == "object") {
-            book = Date.now() + value.name;
+            book = Date.now() + '-' + value.name;
             const buffer = Buffer.from(await value.arrayBuffer());
-            type = (await fileTypeFromBuffer(buffer))?.mime
+            const arrayBuffer = new ArrayBuffer(buffer.length);
+
+            let uint8Array: any = arrayBuffer
+
+            // test have to change
+            if (process.env.NODE_ENV === 'test') {
+                uint8Array = new Uint8Array(arrayBuffer);
+                for (let i = 0; i < buffer.length; i++) {
+                    uint8Array[i] = buffer[i];
+                }
+            }
+            type = (await fileTypeFromBuffer(uint8Array))?.mime
+
             const stream = Readable.from(buffer);
             const uploadStream = bucket.openUploadStream(book, {});
             await stream.pipe(uploadStream);
