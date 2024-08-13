@@ -1,9 +1,12 @@
 import View from "../components/view";
+import { NextUIProvider } from "@nextui-org/react";
 
 export default function Home() {
   return (
-    <div>
-      <View></View>
-    </div>
+    <NextUIProvider>
+      <div className="dark">
+        <View></View>
+      </div>
+    </NextUIProvider>
   );
 }
