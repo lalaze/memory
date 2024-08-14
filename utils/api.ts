@@ -1,5 +1,3 @@
-import { auth } from '../auth'
-
 export const fetchWrapper = async (url: string, options = {}) => {
   try {
     const response = await fetch(url, options);

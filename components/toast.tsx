@@ -6,7 +6,6 @@ const showToast = (message: string, type: string) => {
     position: "top-right" as ToastPosition,
     // hideProgressBar: true
   };
-
   switch (type) {
     case "success":
       toast.success(message, options);

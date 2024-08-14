@@ -18,3 +18,13 @@ export const showSearch = atom(
         set(search, newSearch);
     }
 )
+
+const navFunctionAtom = atom({ fn: () => { } })
+
+export const navFnAtom = atom(
+    (get) => get(navFunctionAtom),
+    (get, set, newFn: any) => {
+        set(navFunctionAtom, { fn: newFn })
+    }
+)
+

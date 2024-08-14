@@ -4,6 +4,8 @@ import { auth } from "../auth";
 import { Inter } from "next/font/google";
 import { Session } from "next-auth";
 import Nav from "@/components/nav";
+import { ToastContainer } from 'react-toastify';
+import { NextUIProvider } from "@nextui-org/react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,9 +25,14 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <Provider initialState={session}>
-        <body className={inter.className}>
-          <Nav></Nav>
-          {children}
+        <body className={`${inter.className} dark overflow-hidden`}>
+          <NextUIProvider>
+            {session?.user?.email ? <Nav></Nav> : ""}
+            <div className="content-height bg-[#000000] w-lvh">
+              {children}
+            </div>
+          </NextUIProvider>
+          <ToastContainer />
         </body>
       </Provider>
     </html>

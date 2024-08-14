@@ -15,7 +15,8 @@ export async function GET(req: NextRequest) {
 
     const result = await Book.findOne({
         email,
-        filename: file
+        bookUrl: file
+        // book: file
     })
 
     if (!result) {

@@ -69,10 +69,11 @@ body {
   max-width: 100% !important;
 }
 
-.content-height {
-  height: calc(100% - 66px);
-}
-
 .font-table {
   font-family: '__Inter_aaf875', '__Inter_Fallback_aaf875';
+}
+
+.content-height {
+  height: calc(100lvh - 4rem);
+  /* height: var(--navbar-height); */
 }

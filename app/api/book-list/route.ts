@@ -9,6 +9,8 @@ export async function GET(req: NextRequest) {
 
     await dbConnect();
 
+    const totalCount = await Book.countDocuments({ email: req.headers.get('email') });
+
     const list = await Book.find({
         email: req.headers.get('email')
     }).skip(offset).limit(limit)
@@ -19,6 +21,7 @@ export async function GET(req: NextRequest) {
             return {
                 name: item.bookUrl
             }
-        })
+        }),
+        total: totalCount
     });
 }
