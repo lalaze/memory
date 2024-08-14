@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ReactReader } from "react-reader";
+import { usePathname } from "next/navigation";
 import type { Contents, Rendition } from "epubjs";
 
 type ITextSelection = {
@@ -13,8 +14,9 @@ export default function Book() {
   const [location, setLocation] = useState<string | number>(0);
   const [rendition, setRendition] = useState<Rendition | undefined>(undefined);
   const [selections, setSelections] = useState<ITextSelection[]>([]);
-
-  const file = window.location.href.split('/').pop()
+  const pathname = usePathname();
+  const file = pathname.split('/').pop()
+  // const file = window.location.href.split('/').pop()
 
   function setRenderSelection(cfiRange: string, contents: Contents) {
     if (rendition) {
@@ -47,9 +49,9 @@ export default function Book() {
   }, [setSelections, rendition]);
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div className="h-full">
       <ReactReader
-        url={`http://localhost:3000/api/download/${file}`}
+        url={`/api/download/${file}`}
         location={location}
         showToc={true}
         locationChanged={(epubcfi: string) => {

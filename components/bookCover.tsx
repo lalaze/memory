@@ -1,10 +1,12 @@
 import { Card, CardFooter, Image, CardBody } from "@nextui-org/react";
 import ePub, { Book } from "epubjs";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BookCover({ url }: { url: string }) {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState("");
+  const router = useRouter();
 
   const openBook = async () => {
     try {
@@ -25,12 +27,17 @@ export default function BookCover({ url }: { url: string }) {
     openBook();
   }, []);
 
+  const goBook = () => {
+    router.push(`/book/${url}`)
+  }
+
   return (
     <Card
       isFooterBlurred
       radius="lg"
       isPressable
       className="border-none w-[200px] h-[200px]"
+      onPress={goBook}
     >
       <CardBody className="overflow-visible p-0">
         <Image
