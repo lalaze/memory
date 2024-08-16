@@ -28,7 +28,7 @@ export default async function RootLayout({
         <body className={`${inter.className} dark overflow-hidden`}>
           <NextUIProvider>
             {session?.user?.email ? <Nav></Nav> : ""}
-            <div className="content-height bg-[#000000] w-lvh">
+            <div className={`${session ? 'content-height' : 'h-lvh'}  bg-[#000000] w-lvh`}>
               {children}
             </div>
           </NextUIProvider>

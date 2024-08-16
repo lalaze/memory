@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ReactReader } from "react-reader";
 import { usePathname } from "next/navigation";
 import type { Contents, Rendition } from "epubjs";
-import { IReactReaderStyle, ReactReaderStyle } from "./styleType";
+import { darkReaderTheme, lightReaderTheme } from "./styleType";
 
 type ITheme = "light" | "dark";
 
@@ -29,58 +29,39 @@ function updateTheme(rendition: Rendition, theme: ITheme) {
   }
 }
 
-const lightReaderTheme: IReactReaderStyle = {
-  ...ReactReaderStyle,
-  readerArea: {
-    ...ReactReaderStyle.readerArea,
-    transition: undefined,
-  },
-};
-
-const darkReaderTheme: IReactReaderStyle = {
-  ...ReactReaderStyle,
-  arrow: {
-    ...ReactReaderStyle.arrow,
-    color: "white",
-  },
-  arrowHover: {
-    ...ReactReaderStyle.arrowHover,
-    color: "#ccc",
-  },
-  readerArea: {
-    ...ReactReaderStyle.readerArea,
-    backgroundColor: "#000",
-    transition: undefined,
-  },
-  titleArea: {
-    ...ReactReaderStyle.titleArea,
-    color: "#ccc",
-  },
-  tocArea: {
-    ...ReactReaderStyle.tocArea,
-    background: "#111",
-  },
-  tocButtonExpanded: {
-    ...ReactReaderStyle.tocButtonExpanded,
-    background: "#222",
-  },
-  tocButtonBar: {
-    ...ReactReaderStyle.tocButtonBar,
-    background: "#fff",
-  },
-  tocButton: {
-    ...ReactReaderStyle.tocButton,
-    color: "white",
-  },
-};
-
 export default function Book() {
   const [location, setLocation] = useState<string | number>(0);
   const [rendition, setRendition] = useState<Rendition | undefined>(undefined);
   const [selections, setSelections] = useState<ITextSelection[]>([]);
+  const [saveCfi, setCfi] = useState<string[]>([])
   const pathname = usePathname();
   const file = pathname.split("/").pop();
+
+  const fakeList = [
+    "epubcfi(/6/4!/4/8[pgepubid00000],/1:0,/1:32)"
+  ]
+
+  useEffect(() => {
+    setCfi(fakeList)
+  }, [])
+
   // const file = window.location.href.split('/').pop()
+
+  const initSelection = () => {
+    if (rendition) {
+      saveCfi.forEach((item: string) => {
+        rendition.annotations.add(
+          "highlight",
+          item,
+          {},
+          (e: MouseEvent) => console.log("click on selection", item, e),
+          "hl",
+          { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
+        );
+      })
+
+    }
+  }
 
   const [theme, setTheme] = useState<ITheme>("dark");
 
@@ -95,7 +76,6 @@ export default function Book() {
     console.log("zeze", cfiRange, contents);
     if (rendition) {
       setSelections((list) => {
-        console.log(list)
         return list.concat({
           text: rendition.getRange(cfiRange).toString(),
           cfiRange,
@@ -116,8 +96,8 @@ export default function Book() {
 
   useEffect(() => {
     if (rendition) {
+      initSelection()
       rendition.on("selected", setRenderSelection);
-      // setRenderSelection('epubcfi(/6/6!/4/2[pgepubid00003]/14')
       return () => {
         rendition?.off("selected", setRenderSelection);
       };
