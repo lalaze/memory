@@ -76,7 +76,6 @@ const Nav = () => {
       });
 
       if (res.success) {
-        console.log("Upload successful:");
         navFunc.fn()
       } else {
         showToast(res.message, 'error')

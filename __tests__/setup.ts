@@ -5,7 +5,6 @@ const path = require('path')
 import Cards from '@/models/cards'
 import mongoose from 'mongoose'
 import dayjs from 'dayjs'
-import Book from '@/models/book'
 
 export const todayCardId = '66b485fc6542ae3026d0f057'
 
@@ -22,16 +21,7 @@ beforeEach(async () => {
 
     const { bucket, client } = await dbConnect()
 
-    await Book.deleteMany()
-
     await Cards.deleteMany()
-
-    await (new Book({
-        _id: new mongoose.Types.ObjectId(testBookId),
-        email: process.env.TEST_EMAIL,
-        bookUrl: 'test.epub',
-        type: 'application/epub+zip'
-    })).save()
 
     await (new Cards({
         _id: new mongoose.Types.ObjectId(todayCardId),

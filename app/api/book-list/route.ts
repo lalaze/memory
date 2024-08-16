@@ -1,27 +1,28 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "@/utils/db";
-import Book from '@/models/book'
 
 export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url);
-    const limit = Number(searchParams.get('limit')) || 10
-    const offset = Number(searchParams.get('limit')) || 0
+  const { searchParams } = new URL(req.url);
+  const limit = Number(searchParams.get('limit')) || 10
+  const offset = Number(searchParams.get('limit')) || 0
 
-    await dbConnect();
+  const { client } = await dbConnect();
 
-    const totalCount = await Book.countDocuments({ email: req.headers.get('email') });
+  const filesCollection = client.connection.collection('uploads.files');
 
-    const list = await Book.find({
-        email: req.headers.get('email')
-    }).skip(offset).limit(limit)
+  const totalCount = await filesCollection.countDocuments({ 'metadata.email': req.headers.get('email') });
 
-    return NextResponse.json({
-        success: true,
-        data: list.map((item) => {
-            return {
-                name: item.bookUrl
-            }
-        }),
-        total: totalCount
-    });
+  const list = await filesCollection.find({
+    'metadata.email': req.headers.get('email')
+  }).skip(offset).limit(limit).toArray()
+
+  return NextResponse.json({
+    success: true,
+    data: list.map((item: any) => {
+      return {
+        name: item.filename
+      }
+    }),
+    total: totalCount
+  });
 }

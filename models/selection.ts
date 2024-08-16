@@ -1,12 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface Books extends Document {
+export interface Selection extends Document {
   email: string;
   bookUrl: string;
   type: string;
 }
 
-const BooksSchema = new Schema<Books>({
+const SelectionSchema = new Schema<Selection>({
   email: {
     type: String,
     index: true,
@@ -25,4 +25,4 @@ const BooksSchema = new Schema<Books>({
 });
 
 // Mongoose 会自动添加 _id 字段
-export default mongoose.models.Books || mongoose.model<Books>("Books", BooksSchema);
+export default mongoose.models.Books || mongoose.model<Selection>("selection", SelectionSchema);
