@@ -70,7 +70,7 @@ const Nav = () => {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await fetchWrapper("/api/upload", {
+      const res = await fetchWrapper("/api/book-upload", {
         method: "POST",
         body: formData,
       });

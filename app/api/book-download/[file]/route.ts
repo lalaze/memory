@@ -33,6 +33,6 @@ export async function GET(req: NextRequest) {
   const stream = bucket.openDownloadStreamByName(f.filename);
 
   return new NextResponse(stream, {
-    headers: { "Content-Type": f.metadata.type },
+    headers: { "Content-Type": f.metadata.type }
   });
 }

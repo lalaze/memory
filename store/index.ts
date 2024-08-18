@@ -27,4 +27,3 @@ export const navFnAtom = atom(
         set(navFunctionAtom, { fn: newFn })
     }
 )
-

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ReactReader } from "react-reader";
 import { usePathname } from "next/navigation";
+import { saveSelection, selectionList } from "@/utils/selection";
 import type { Contents, Rendition } from "epubjs";
 import { darkReaderTheme, lightReaderTheme } from "./styleType";
 
@@ -34,18 +35,24 @@ export default function Book() {
   const [rendition, setRendition] = useState<Rendition | undefined>(undefined);
   const [selections, setSelections] = useState<ITextSelection[]>([]);
   const [saveCfi, setCfi] = useState<string[]>([])
+  const [paragraph, setParagraph] = useState<string>('')
   const pathname = usePathname();
-  const file = pathname.split("/").pop();
+  const file = pathname.split("/").pop() || ''
 
-  const fakeList = [
-    "epubcfi(/6/4!/4/8[pgepubid00000],/1:0,/1:32)"
-  ]
+  const initS = async () => {
+    const data = await selectionList(file, paragraph)
+    setCfi(data.map((item: any) => item.cfi))
+  }
 
   useEffect(() => {
-    setCfi(fakeList)
-  }, [])
+    initS()
+  }, [paragraph])
 
-  // const file = window.location.href.split('/').pop()
+  useEffect(() => {
+    if (saveCfi.length > 0 && rendition) {
+      initSelection()
+    }
+  }, [saveCfi])
 
   const initSelection = () => {
     if (rendition) {
@@ -73,7 +80,6 @@ export default function Book() {
   }, [theme]);
 
   function setRenderSelection(cfiRange: string, contents: Contents) {
-    console.log("zeze", cfiRange, contents);
     if (rendition) {
       setSelections((list) => {
         return list.concat({
@@ -92,6 +98,8 @@ export default function Book() {
       const selection = contents.window.getSelection();
       selection?.removeAllRanges();
     }
+
+    saveSelection(file, cfiRange, 'red', [], '')
   }
 
   useEffect(() => {
@@ -107,12 +115,18 @@ export default function Book() {
   return (
     <div className="h-full">
       <ReactReader
-        url={`/api/download/${file}`}
+        url={`/api/book-download/${file}`}
         location={location}
         showToc={true}
+        epubInitOptions={{
+          openAs: 'epub',
+        }}
         readerStyles={theme === "dark" ? darkReaderTheme : lightReaderTheme}
         locationChanged={(epubcfi: string) => {
           setLocation(epubcfi);
+          const c = epubcfi.split('/')
+          const cfiBase = [c[1], c[2]].join('/')
+          setParagraph(cfiBase)
         }}
         getRendition={(_rendition: Rendition) => {
           updateTheme(_rendition, theme);

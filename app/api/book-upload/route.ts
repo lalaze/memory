@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       if (existFile) {
         return NextResponse.json({
           success: false,
-          message: 'Duplicate files'
+          message: 'Duplicate file Name'
         });
       }
       const buffer = Buffer.from(await value.arrayBuffer());

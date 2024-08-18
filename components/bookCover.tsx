@@ -1,5 +1,5 @@
 import { Card, CardFooter, Image, CardBody } from "@nextui-org/react";
-import ePub, { Book } from "epubjs";
+import ePub from "epubjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -10,7 +10,7 @@ export default function BookCover({ url }: { url: string }) {
 
   const openBook = async () => {
     try {
-      const book = ePub(`/api/download/${url}`, {});
+      const book = ePub(`/api/book-download/${url}`, {});
       book.loaded.metadata.then((m) => {
         setTitle(m.title);
       });

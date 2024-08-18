@@ -34,5 +34,4 @@ const CardsSchema = new Schema<Cards>({
   }
 });
 
-// Mongoose 会自动添加 _id 字段
 export default mongoose.models.Cards || mongoose.model<Cards>("Cards", CardsSchema);

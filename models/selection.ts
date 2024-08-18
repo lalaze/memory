@@ -2,8 +2,12 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface Selection extends Document {
   email: string;
-  bookUrl: string;
-  type: string;
+  cfi: string;
+  cfiBase: string;
+  bookName: string;
+  color: string;
+  content: string;
+  tags: string[];
 }
 
 const SelectionSchema = new Schema<Selection>({
@@ -12,17 +16,34 @@ const SelectionSchema = new Schema<Selection>({
     index: true,
     required: [true, "email is required"],
   },
-  bookUrl: {
+  cfi: {
+    type: String,
+    index: true,
+    required: [true, "cfi is required"]
+  },
+  cfiBase: {
+    type: String,
+    index: true,
+    required: [true, "cfiBase is required"]
+  },
+  bookName: {
     type: String,
     index: true,
     required: [true, "bookId is required"]
   },
-  type: {
+  color: {
     type: String,
     index: true,
-    required: [true, "type is required"]
-  }
+    required: [true, "color is required"]
+  },
+  content: {
+    type: String,
+    index: true
+  },
+  tags: {
+    type: [String],
+    index: true
+  },
 });
 
-// Mongoose 会自动添加 _id 字段
-export default mongoose.models.Books || mongoose.model<Selection>("selection", SelectionSchema);
+export default mongoose.models.Selection || mongoose.model<Selection>("Selection", SelectionSchema);
