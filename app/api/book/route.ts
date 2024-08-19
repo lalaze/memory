@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "@/utils/db";
 import { fileTypeFromBuffer } from 'file-type';
+import crypto from 'crypto'
 import { Readable } from "stream";
 
 export async function GET(req: NextRequest) {
@@ -29,6 +30,12 @@ export async function GET(req: NextRequest) {
   });
 }
 
+function generateHashFromUint8Array(data: Uint8Array) {
+  const hash = crypto.createHash('sha256')
+  hash.update(data);
+  return hash.digest('hex')
+}
+
 export async function POST(req: NextRequest) {
   const { bucket, client } = await dbConnect();
   const filesCollection = client.connection.collection('uploads.files');
@@ -42,9 +49,17 @@ export async function POST(req: NextRequest) {
 
     if (typeof value == "object") {
       book = value.name;
+
+      const buffer = Buffer.from(await value.arrayBuffer());
+      const arrayBuffer = new ArrayBuffer(buffer.length);
+
+      let uint8Array: any = arrayBuffer
+      uint8Array = new Uint8Array(arrayBuffer);
+      const hash = generateHashFromUint8Array(uint8Array)
+
       const existFile = await filesCollection.findOne({
         filename: book,
-        'metadata.email': email
+        'metadata.hash': hash
       })
 
       if (existFile) {
@@ -53,25 +68,19 @@ export async function POST(req: NextRequest) {
           message: 'Duplicate file Name'
         });
       }
-      const buffer = Buffer.from(await value.arrayBuffer());
-      const arrayBuffer = new ArrayBuffer(buffer.length);
 
-      let uint8Array: any = arrayBuffer
-
-      // test have to change
-      // if (process.env.NODE_ENV === 'test') {
-      uint8Array = new Uint8Array(arrayBuffer);
       for (let i = 0; i < buffer.length; i++) {
         uint8Array[i] = buffer[i];
       }
-      // }
+
       const type = (await fileTypeFromBuffer(uint8Array))?.mime
 
       const stream = Readable.from(buffer);
       const uploadStream = bucket.openUploadStream(book, {
         metadata: {
           email,
-          type
+          type,
+          hash
         }
       });
       stream.pipe(uploadStream).on('finish', () => {

@@ -4,8 +4,8 @@ const { nextui } = require("@nextui-org/react");
 const selectColors = {
   selectPrimary: '#1E90FF',
   selectSecondary: '#FF5733',
-  selectTertiary: '#32CD32',
-  selectQuaternary: '#FF69B4'
+  selectTertiary: '#FF69B4',
+  selectQuaternary: '#45D483'
 }
 
 export const selectColorsList = Object.values(selectColors) 

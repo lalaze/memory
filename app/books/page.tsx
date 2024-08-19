@@ -35,7 +35,7 @@ export default function Books() {
 
   return (
     <div className="relative grid grid-cols-5 gap-4 justify-items-center h-full pt-6 auto-rows-auto grid-rows-[230px_230px]">
-      <SelecTools text={'abc'}></SelecTools>
+      <SelecTools></SelecTools>
       {list.map((item: { name: string }, i: number) => (
         <BookCover key={`${item.name}-${i}`} url={item.name}></BookCover>
       ))}

@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 export const fetchWrapper = async (url: string, options = {}) => {
   try {
     const response = await fetch(url, options);
@@ -17,3 +19,22 @@ export const fetchWrapper = async (url: string, options = {}) => {
     throw error; // 或者返回一个自定义的错误对象
   }
 };
+
+export const useFetchBook = (bookName: string, dependencies = []) => {
+  const [url, setUrl] = useState('');
+  const [hash, setHash] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`/api/book/${bookName}`)
+      const h = String(res.headers.get('Hash'))
+      const localUrl = URL.createObjectURL(await res.blob());
+      setUrl(localUrl)
+      setHash(h)
+    }
+
+    fetchData()
+  }, dependencies)
+
+  return {url, hash}
+}

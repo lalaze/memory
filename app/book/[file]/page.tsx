@@ -5,6 +5,7 @@ import { ReactReader } from "react-reader";
 import { usePathname } from "next/navigation";
 import { saveSelection, selectionList } from "@/utils/selection";
 import type { Contents, Rendition } from "epubjs";
+import { useFetchBook } from '@/utils/api'
 import { darkReaderTheme, lightReaderTheme } from "./styleType";
 
 type ITheme = "light" | "dark";
@@ -35,9 +36,18 @@ export default function Book() {
   const [rendition, setRendition] = useState<Rendition | undefined>(undefined);
   const [selections, setSelections] = useState<ITextSelection[]>([]);
   const [saveCfi, setCfi] = useState<string[]>([])
+  const [bookUrl, setBookUrl] = useState('')
   const [paragraph, setParagraph] = useState<string>('')
   const pathname = usePathname();
   const file = pathname.split("/").pop() || ''
+
+  const { url, hash } = useFetchBook(file)
+
+  useEffect(() => {
+    setBookUrl(url);
+    console.log('zeze hash', hash);
+  }, [url, hash]);
+
 
   const initS = async () => {
     const data = await selectionList(file, paragraph)
@@ -115,7 +125,7 @@ export default function Book() {
   return (
     <div className="h-full">
       <ReactReader
-        url={`/api/book/${file}`}
+        url={bookUrl}
         location={location}
         showToc={true}
         epubInitOptions={{
