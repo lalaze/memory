@@ -81,9 +81,10 @@ export default function Book() {
 
   function setRenderSelection(cfiRange: string, contents: Contents) {
     if (rendition) {
+      const text = rendition.getRange(cfiRange).toString()
       setSelections((list) => {
         return list.concat({
-          text: rendition.getRange(cfiRange).toString(),
+          text: text,
           cfiRange,
         });
       });
@@ -95,11 +96,10 @@ export default function Book() {
         "hl",
         { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
       );
+      saveSelection(file, cfiRange, 'red', [], '', text)
       const selection = contents.window.getSelection();
       selection?.removeAllRanges();
     }
-
-    saveSelection(file, cfiRange, 'red', [], '')
   }
 
   useEffect(() => {

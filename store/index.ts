@@ -1,5 +1,6 @@
 import { atom, useAtom } from "jotai";
 import { Session } from "next-auth";
+import { selectColorsList } from "@/tailwind.config";
 
 export const session = atom<Session | null>(null);
 
@@ -27,3 +28,24 @@ export const navFnAtom = atom(
         set(navFunctionAtom, { fn: newFn })
     }
 )
+
+type selectionToolsStateType = {
+  nowColor: string
+  text: string
+  content: string
+  tags: string[]
+}
+
+const selectToolsState = atom({
+  nowColor: selectColorsList[0],
+  text: '',
+  content: '',
+  tags: [] as string[]
+})
+
+export const selectToolsStateAtom = atom(
+  (get) => get(selectToolsState),
+  (get, set, newSelectToolsState: selectionToolsStateType) => {
+      set(selectToolsState, newSelectToolsState)
+  }
+) 

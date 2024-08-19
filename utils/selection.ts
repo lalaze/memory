@@ -20,7 +20,7 @@ export const isCFIInRange = (cfiA: string, cfiB: string) => {
   return true;
 }
 
-export const saveSelection = async (bookName: string, cfi: string, color: string, tags: string[], content: string) => {
+export const saveSelection = async (bookName: string, cfi: string, color: string, tags: string[], content: string, text: string) => {
   const c = cfi.split('/')
   const cfiBase = [c[1], c[2]].join('/')
   const res = await fetchWrapper('/api/selection', {
@@ -31,7 +31,8 @@ export const saveSelection = async (bookName: string, cfi: string, color: string
       bookName,
       content,
       tags,
-      color
+      color,
+      text
     })
   })
 }

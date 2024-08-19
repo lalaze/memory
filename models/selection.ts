@@ -7,6 +7,7 @@ export interface Selection extends Document {
   bookName: string;
   color: string;
   content: string;
+  text: string;
   tags: string[];
 }
 
@@ -25,6 +26,11 @@ const SelectionSchema = new Schema<Selection>({
     type: String,
     index: true,
     required: [true, "cfiBase is required"]
+  },
+  text: {
+    type: String,
+    index: true,
+    required: [true, "text is required"]
   },
   bookName: {
     type: String,

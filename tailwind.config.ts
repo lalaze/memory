@@ -1,5 +1,14 @@
 import type { Config } from "tailwindcss";
-const {nextui} = require("@nextui-org/react");
+const { nextui } = require("@nextui-org/react");
+
+const selectColors = {
+  selectPrimary: '#1E90FF',
+  selectSecondary: '#FF5733',
+  selectTertiary: '#32CD32',
+  selectQuaternary: '#FF69B4'
+}
+
+export const selectColorsList = Object.values(selectColors) 
 
 const config: Config = {
   content: [
@@ -17,6 +26,9 @@ const config: Config = {
         "delte-icon": "url('/shanchu.png')",
         "edit-icon": "url('/tianxie.png')"
       },
+      colors: {
+        ...selectColors
+      }
     },
   },
   darkMode: "class",

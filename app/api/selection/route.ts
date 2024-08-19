@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
     bookName: body.bookName,
     color: body.color,
     content: body.content,
-    tags: body.tags
+    tags: body.tags,
+    text: body.text
   })
 
   await s.save()
