@@ -10,7 +10,7 @@ export default function BookCover({ url }: { url: string }) {
 
   const openBook = async () => {
     try {
-      const book = ePub(`/api/book-download/${url}`, {});
+      const book = ePub(`/api/book/${url}`, {});
       book.loaded.metadata.then((m) => {
         setTitle(m.title);
       });

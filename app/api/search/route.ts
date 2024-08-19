@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
-import dbConnect from "../../../utils/db";
-import cards from "../../../models/cards";
+import dbConnect from "@/utils/db";
+import cards from "@/models/cards";
 
 type paramsProps = {
   content: string

@@ -115,7 +115,7 @@ export default function Book() {
   return (
     <div className="h-full">
       <ReactReader
-        url={`/api/book-download/${file}`}
+        url={`/api/book/${file}`}
         location={location}
         showToc={true}
         epubInitOptions={{

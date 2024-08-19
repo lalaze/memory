@@ -1,11 +1,11 @@
 import { test, expect } from "vitest";
 import { GET as bookListGET } from "@/app/api/book-list/route";
-import { GET as CardGET } from "@/app/api/card/route";
-import { GET as CardsGET } from "@/app/api/cards/route";
-import { GET as DeleteGET } from "@/app/api/delete/route";
-import { GET as DownloadGET } from "@/app/api/book-download/[file]/route";
-import { POST as EditPOST } from "@/app/api/edit/route";
-import { POST as NewPOST } from "@/app/api/new/route";
+import { GET as CardGET } from "@/app/api/will-delete/card/route";
+import { GET as CardsGET } from "@/app/api/will-delete/cards/route";
+import { GET as DeleteGET } from "@/app/api/will-delete/delete/route";
+import { GET as DownloadGET } from "@/app/api/book/[file]/route";
+import { POST as EditPOST } from "@/app/api/will-delete/edit/route";
+import { POST as NewPOST } from "@/app/api/will-delete/new/route";
 import { GET as ReviewGET } from "@/app/api/review/route";
 import { POST as SearchPOST } from "@/app/api/search/route";
 import { POST as UploadPost } from "@/app/api/book-upload/route";

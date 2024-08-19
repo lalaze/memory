@@ -13,7 +13,7 @@ export default function Books() {
   const [navFunc, setNavFunc] = useAtom(navFnAtom);
 
   const fetchData = async () => {
-    const res = await fetchWrapper(`/api/book-list?offset=${offset}`);
+    const res = await fetchWrapper(`/api/book?offset=${offset}`);
     if (res.success) {
       setList(res.data);
       setPage(Math.floor(res.total / 10) || 1);
