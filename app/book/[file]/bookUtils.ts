@@ -35,11 +35,11 @@ export const useTheme = (rendition: Rendition | undefined, dependencies = []) =>
   return { theme }
 }
 
-export const useTools = (rendition: Rendition | undefined, dependencies = []) => {
+export const useTools = (show: boolean, rendition: Rendition | undefined, dependencies = []) => {
   const [sState, setState] = useAtom(selectToolsStateAtom);
 
   useEffect(() => {
-    if (rendition) {
+    if (rendition && show) {
       rendition.annotations.remove(sState.cfi, 'highlight')
       rendition.annotations.add(
         "highlight",
@@ -57,5 +57,3 @@ export const useTools = (rendition: Rendition | undefined, dependencies = []) =>
 
   return { sState, setState }
 }
-
-

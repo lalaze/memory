@@ -15,9 +15,21 @@ export async function GET(req: NextRequest) {
     cfiBase
   })
 
+  const res = list.map((item) => {
+    return {
+      bookName: item.bookName,
+      cfi: item.cfi,
+      cfiBase: item.cfiBase,
+      color: item.color,
+      content: item.content,
+      tags: item.tags,
+      id: item._id
+    }
+  })
+
   return NextResponse.json({
     success: true,
-    data: list
+    data: res
   });
 }
 

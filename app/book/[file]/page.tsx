@@ -8,18 +8,13 @@ import type { Contents, Rendition } from "epubjs";
 import { useFetchBook } from '@/utils/api'
 import SelecTools from "@/components/selectTools";
 import { darkReaderTheme, lightReaderTheme } from "./styleType";
-import { updateTheme, useTheme, useTools } from './bookUtils'
-
-
-type ITextSelection = {
-  text: string;
-  cfiRange: string;
-};
+import { updateTheme, useTheme, useTools } from './bookUtils';
+import { SelectionList } from '@/models/selection'
 
 export default function Book() {
   const [location, setLocation] = useState<string | number>(0);
   const [rendition, setRendition] = useState<Rendition | undefined>(undefined);
-  const [selections, setSelections] = useState<ITextSelection[]>([]);
+  const [selections, setSelections] = useState<SelectionList[]>([]);
   const [saveCfi, setCfi] = useState<string[]>([])
   const [bookUrl, setBookUrl] = useState('')
   const [show, setShow] = useState(false)
@@ -28,8 +23,8 @@ export default function Book() {
   const pathname = usePathname();
   const file = pathname.split("/").pop() || ''
   const { url, hash } = useFetchBook(file)
-  const {sState, setState} = useTools(rendition)
   const showRef = useRef(show);
+  const { sState, setState } = useTools(showRef.current, rendition)
   const { theme } = useTheme(rendition)
 
   const changeSelecetionsTool = () => {
@@ -44,17 +39,17 @@ export default function Book() {
     }
   }
 
-  const mouseUp = (e: any) => {
+  const mouseUp = (e: MouseEvent) => {
     if (isDraging) {
       isDraging = false
-      sState.x = e.offsetX
-      sState.y = e.clientY
-      setState(sState)
     }
+    sState.x = e.offsetX
+    sState.y = e.clientY
+    setState(sState)
   }
 
   useEffect(() => {
-   showRef.current = show
+    showRef.current = show
   }, [show]);
 
   useEffect(() => {
@@ -62,7 +57,8 @@ export default function Book() {
   }, [url, hash]);
 
   const initS = async () => {
-    const data = await selectionList(file, paragraph)
+    const data: SelectionList[] = await selectionList(file, paragraph)
+    setSelections(data)
     setCfi(data.map((item: any) => item))
   }
 
@@ -83,7 +79,7 @@ export default function Book() {
           "highlight",
           item.cfi,
           {},
-          (e: MouseEvent) => console.log("click on selection", item, e),
+          (e: MouseEvent) => clickOpen(e, item.cfi),
           "hl",
           { fill: item.color, "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
         );
@@ -95,17 +91,11 @@ export default function Book() {
   async function setRenderSelection(cfiRange: string, contents: Contents) {
     if (rendition) {
       const text = rendition.getRange(cfiRange).toString()
-      setSelections((list) => {
-        return list.concat({
-          text: text,
-          cfiRange,
-        });
-      });
       rendition.annotations.add(
         "highlight",
         cfiRange,
         {},
-        (e: MouseEvent) => console.log("click on selection", cfiRange, e),
+        (e: MouseEvent) => clickOpen(e, cfiRange),
         "hl",
         { fill: sState.color, "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
       );
@@ -113,10 +103,16 @@ export default function Book() {
       selection?.removeAllRanges();
       const res = await saveSelection(file, cfiRange, sState.color, [], '', text)
       setState({
-       ...sState,
+        ...sState,
         ...res
       })
-      
+      setSelections((list) => {
+        return list.concat({
+          ...sState,
+          ...res
+        });
+      });
+
       if (sState.x) {
         changeSelecetionsTool()
       }
@@ -147,6 +143,17 @@ export default function Book() {
       contents[0].document.onmousedown = mouseDown
       contents[0].document.onmouseup = mouseUp
     }
+  }
+
+  const clickOpen = (e: MouseEvent, cfiRange: string) => {
+    console.log('zeze', showRef)
+    const s = selections.filter((item) => item.cfi === cfiRange)[0]
+    setState({
+      x: sState.x,
+      y: sState.y,
+      ...s,
+    })
+    setShow(true)
   }
 
   return (

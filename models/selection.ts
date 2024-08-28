@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface Selection {
-  
   cfi: string;
   cfiBase: string;
   bookName: string;
@@ -9,6 +8,10 @@ export interface Selection {
   content: string;
   text: string;
   tags: string[];
+}
+
+export type SelectionList = Selection & {
+  id: string
 }
 
 type SelectionD = Document & Selection & {
