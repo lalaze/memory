@@ -1,35 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ReactReader } from "react-reader";
 import { usePathname } from "next/navigation";
 import { saveSelection, selectionList } from "@/utils/selection";
 import type { Contents, Rendition } from "epubjs";
 import { useFetchBook } from '@/utils/api'
+import SelecTools from "@/components/selectTools";
 import { darkReaderTheme, lightReaderTheme } from "./styleType";
+import { updateTheme, useTheme, useTools } from './bookUtils'
 
-type ITheme = "light" | "dark";
 
 type ITextSelection = {
   text: string;
   cfiRange: string;
 };
-
-function updateTheme(rendition: Rendition, theme: ITheme) {
-  const themes = rendition.themes;
-  switch (theme) {
-    case "dark": {
-      themes.override("color", "#fff");
-      themes.override("background", "#000");
-      break;
-    }
-    case "light": {
-      themes.override("color", "#000");
-      themes.override("background", "#fff");
-      break;
-    }
-  }
-}
 
 export default function Book() {
   const [location, setLocation] = useState<string | number>(0);
@@ -37,21 +22,48 @@ export default function Book() {
   const [selections, setSelections] = useState<ITextSelection[]>([]);
   const [saveCfi, setCfi] = useState<string[]>([])
   const [bookUrl, setBookUrl] = useState('')
+  const [show, setShow] = useState(false)
   const [paragraph, setParagraph] = useState<string>('')
+  let isDraging = false
   const pathname = usePathname();
   const file = pathname.split("/").pop() || ''
-
   const { url, hash } = useFetchBook(file)
+  const {sState, setState} = useTools(rendition)
+  const showRef = useRef(show);
+  const { theme } = useTheme(rendition)
+
+  const changeSelecetionsTool = () => {
+    setShow(!showRef.current)
+  }
+
+  let mouseDown = () => {
+    if (showRef.current) {
+      changeSelecetionsTool()
+    } else {
+      isDraging = true
+    }
+  }
+
+  const mouseUp = (e: any) => {
+    if (isDraging) {
+      isDraging = false
+      sState.x = e.offsetX
+      sState.y = e.clientY
+      setState(sState)
+    }
+  }
+
+  useEffect(() => {
+   showRef.current = show
+  }, [show]);
 
   useEffect(() => {
     setBookUrl(url);
-    console.log('zeze hash', hash);
   }, [url, hash]);
-
 
   const initS = async () => {
     const data = await selectionList(file, paragraph)
-    setCfi(data.map((item: any) => item.cfi))
+    setCfi(data.map((item: any) => item))
   }
 
   useEffect(() => {
@@ -66,30 +78,21 @@ export default function Book() {
 
   const initSelection = () => {
     if (rendition) {
-      saveCfi.forEach((item: string) => {
+      saveCfi.forEach((item: any) => {
         rendition.annotations.add(
           "highlight",
-          item,
+          item.cfi,
           {},
           (e: MouseEvent) => console.log("click on selection", item, e),
           "hl",
-          { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
+          { fill: item.color, "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
         );
       })
 
     }
   }
 
-  const [theme, setTheme] = useState<ITheme>("dark");
-
-  useEffect(() => {
-    const r = rendition as any;
-    if (rendition && r.current) {
-      updateTheme(r.current, theme);
-    }
-  }, [theme]);
-
-  function setRenderSelection(cfiRange: string, contents: Contents) {
+  async function setRenderSelection(cfiRange: string, contents: Contents) {
     if (rendition) {
       const text = rendition.getRange(cfiRange).toString()
       setSelections((list) => {
@@ -104,26 +107,51 @@ export default function Book() {
         {},
         (e: MouseEvent) => console.log("click on selection", cfiRange, e),
         "hl",
-        { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
+        { fill: sState.color, "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
       );
-      saveSelection(file, cfiRange, 'red', [], '', text)
       const selection = contents.window.getSelection();
       selection?.removeAllRanges();
+      const res = await saveSelection(file, cfiRange, sState.color, [], '', text)
+      setState({
+       ...sState,
+        ...res
+      })
+      
+      if (sState.x) {
+        changeSelecetionsTool()
+      }
     }
   }
 
   useEffect(() => {
     if (rendition) {
+      const r = rendition as any;
       initSelection()
       rendition.on("selected", setRenderSelection);
+
       return () => {
         rendition?.off("selected", setRenderSelection);
       };
     }
   }, [setSelections, rendition]);
 
+  const locationChanged = (epubcfi: string) => {
+    setLocation(epubcfi);
+    const c = epubcfi.split('/')
+    const cfiBase = [c[1], c[2]].join('/')
+    setParagraph(cfiBase)
+
+    if (rendition) {
+      setShow(false)
+      const contents: any = rendition.getContents()
+      contents[0].document.onmousedown = mouseDown
+      contents[0].document.onmouseup = mouseUp
+    }
+  }
+
   return (
-    <div className="h-full">
+    <div className="h-full relative">
+      {show && <SelecTools key="selection" x={sState.x} y={sState.y}></SelecTools>}
       <ReactReader
         url={bookUrl}
         location={location}
@@ -132,12 +160,7 @@ export default function Book() {
           openAs: 'epub',
         }}
         readerStyles={theme === "dark" ? darkReaderTheme : lightReaderTheme}
-        locationChanged={(epubcfi: string) => {
-          setLocation(epubcfi);
-          const c = epubcfi.split('/')
-          const cfiBase = [c[1], c[2]].join('/')
-          setParagraph(cfiBase)
-        }}
+        locationChanged={locationChanged}
         getRendition={(_rendition: Rendition) => {
           updateTheme(_rendition, theme);
           setRendition(_rendition);

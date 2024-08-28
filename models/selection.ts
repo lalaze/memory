@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface Selection extends Document {
-  email: string;
+export interface Selection {
+  
   cfi: string;
   cfiBase: string;
   bookName: string;
@@ -11,7 +11,11 @@ export interface Selection extends Document {
   tags: string[];
 }
 
-const SelectionSchema = new Schema<Selection>({
+type SelectionD = Document & Selection & {
+  email: string;
+}
+
+const SelectionSchema = new Schema<SelectionD>({
   email: {
     type: String,
     index: true,
@@ -52,4 +56,4 @@ const SelectionSchema = new Schema<Selection>({
   },
 });
 
-export default mongoose.models.Selection || mongoose.model<Selection>("Selection", SelectionSchema);
+export default mongoose.models.Selection || mongoose.model<SelectionD>("Selection", SelectionSchema);

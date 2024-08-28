@@ -1,4 +1,5 @@
 import { fetchWrapper } from "./api";
+import { Selection } from '@/models/selection'
 
 export const isCFIInRange = (cfiA: string, cfiB: string) => {
   const parseCFI = (cfi: string) => cfi.split('!').map(part => part.split('/').filter(p => p));
@@ -33,6 +34,27 @@ export const saveSelection = async (bookName: string, cfi: string, color: string
       tags,
       color,
       text
+    })
+  })
+
+  return {
+    id: res.id,
+    cfi,
+    cfiBase,
+    bookName,
+    content,
+    tags,
+    color,
+    text
+  }
+}
+
+export const updateSelection = async (id: string, obj: Selection) => {
+  await fetchWrapper('/api/selection', {
+    method: 'PUT',
+    body: JSON.stringify({
+      id,
+      ...obj
     })
   })
 }

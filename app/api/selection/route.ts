@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from "../../../utils/db";
+import mongoose from "mongoose";
 import selection from '@/models/selection';
 
 export async function GET(req: NextRequest) {
@@ -35,11 +36,29 @@ export async function POST(req: NextRequest) {
     text: body.text
   })
 
-  await s.save()
+  const res = await s.save()
+
+  return NextResponse.json({
+    id: String(res._id),
+    success: true
+  });
+}
+
+export async function PUT(req: NextRequest) {
+  await dbConnect();
+  const body = await req.json()
+  await selection.findByIdAndUpdate({ _id: new mongoose.Types.ObjectId(body.id)}, {
+    cfi: body.cfi,
+    cfiBase: body.cfiBase,
+    bookName: body.bookName,
+    color: body.color,
+    content: body.content,
+    tags: body.tags,
+    text: body.text
+  })
 
   return NextResponse.json({
     success: true
   });
 }
-
 
