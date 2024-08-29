@@ -1,3 +1,4 @@
+import showToast from "@/components/toast";
 import { fetchWrapper } from "./api";
 import { Selection } from '@/models/selection'
 
@@ -50,17 +51,20 @@ export const saveSelection = async (bookName: string, cfi: string, color: string
 }
 
 export const updateSelection = async (id: string, obj: Selection) => {
-  await fetchWrapper('/api/selection', {
+  const res = await fetchWrapper('/api/selection', {
     method: 'PUT',
     body: JSON.stringify({
       id,
       ...obj
     })
   })
+
+  if (!res.success) {
+    showToast('error', 'error')
+  }
 }
 
 export const deleteSelection = async (id: string) => {
-  console.log('zeze d')
   const res = await fetchWrapper(`/api/selection?id=${id}`, {
     method: 'DELETE'
   })

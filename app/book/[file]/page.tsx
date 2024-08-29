@@ -24,8 +24,19 @@ export default function Book() {
   const file = pathname.split("/").pop() || ''
   const { url, hash } = useFetchBook(file)
   const showRef = useRef(show);
-  const { sState, setState, deleteFunc } = useTools(showRef.current, setShow, rendition)
   const { theme } = useTheme(rendition)
+
+  const clickOpen = (e: MouseEvent, cfiRange: string) => {
+    const s = selections.filter((item) => item.cfi === cfiRange)[0]
+    setState({
+      x: sState.x,
+      y: sState.y,
+      ...s,
+    })
+    setShow(true)
+  }
+
+  const { sState, setState, deleteFunc } = useTools(showRef.current, setShow, rendition, clickOpen)
 
   const changeSelecetionsTool = () => {
     setShow(!showRef.current)
@@ -144,17 +155,6 @@ export default function Book() {
       contents[0].document.onmouseup = mouseUp
     }
   }
-
-  const clickOpen = (e: MouseEvent, cfiRange: string) => {
-    const s = selections.filter((item) => item.cfi === cfiRange)[0]
-    setState({
-      x: sState.x,
-      y: sState.y,
-      ...s,
-    })
-    setShow(true)
-  }
-
 
   return (
     <div className="h-full relative">

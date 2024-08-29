@@ -60,7 +60,7 @@ export async function PUT(req: NextRequest) {
   await dbConnect();
   const body = await req.json()
 
-  if (body.id) {
+  if (!body.id) {
     return NextResponse.json({
       success: false
     })

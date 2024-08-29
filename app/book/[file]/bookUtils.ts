@@ -37,7 +37,7 @@ export const useTheme = (rendition: Rendition | undefined, dependencies = []) =>
   return { theme }
 }
 
-export const useTools = (show: boolean, setShow: Function, rendition: Rendition | undefined, dependencies = []) => {
+export const useTools = (show: boolean, setShow: Function, rendition: Rendition | undefined, clickOpen: Function, dependencies = []) => {
   const [sState, setState] = useAtom(selectToolsStateAtom);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const useTools = (show: boolean, setShow: Function, rendition: Rendition 
         "highlight",
         sState.cfi,
         {},
-        (e: MouseEvent) => console.log("click on selection", sState.cfi, e),
+        (e: MouseEvent) => clickOpen(e, sState.cfi),
         "hl",
         { fill: sState.color, "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
       );

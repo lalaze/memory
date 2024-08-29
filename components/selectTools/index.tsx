@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react"
 import { selectColorsList } from "@/tailwind.config"
-import { DeleteIcon } from "../icon"
+import { DeleteIcon, EidtIcon } from "../icon"
 import { useAtom } from "jotai"
+import SelectionContent from './content'
 import { selectToolsStateAtom } from "@/store/index"
 
 const SelecTools = ({ x, y, deleteFunc }: { x: number, y: number, deleteFunc: Function }) => {
   const [color, setColor] = useState(selectColorsList[0])
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState(false)
   const [tags, setTags] = useState<String[]>([])
   const [text, setText] = useState('')
   const [toolsState, setToolsState] = useAtom(selectToolsStateAtom)
+
   useEffect(() => {
     setColor(toolsState.color)
-    setContent(toolsState.content)
-    setTags(toolsState.tags)
-    setText(toolsState.text)
+    // setContent(toolsState.content)
+    // setTags(toolsState.tags)
+    // setText(toolsState.text)
   }, [toolsState])
 
   const changeColor = (color: string) => {
@@ -25,21 +27,32 @@ const SelecTools = ({ x, y, deleteFunc }: { x: number, y: number, deleteFunc: Fu
     });
   }
 
-  return <div className="flex justify-center items-center w-70 h-10 px-2 py-2 absolute bg-[#71717A] rounded-lg z-[1000] cursor-pointer" style={{
+  const openContent = () => {
+    setContent(true)
+  }
+
+  return <div className="absolute z-[1000]" style={{
     left: `${x - 100}px`,
     top: `${y}px`
   }}>
-    <div className=" flex justify-around items-center">
-      {selectColorsList.map((c, i) => <div onClick={() => changeColor(c)} key={c} className={`px-2 border-r-2`}>
-        <div className={`w-5 h-5 rounded-[50%] ${c === color && 'border'}`} style={{
-          backgroundColor: c,
-        }}></div>
-      </div>)}
-    </div>
-    <div className="ml-2 mb-[3px]" onClick={() => deleteFunc()}>
-      <DeleteIcon />
-    </div>
+    {content ? <SelectionContent content={toolsState.content}></SelectionContent> : <div className="flex justify-center items-center w-70 h-10 px-2 bg-[#71717A] rounded-lg cursor-pointer">
+      <div className="mr-0.5 border-r-2 h-full flex items-center" onClick={openContent}>
+        <EidtIcon />
+      </div>
+      <div className=" flex justify-around items-center h-full">
+        {selectColorsList.map((c, i) => <div onClick={() => changeColor(c)} key={c} className={`px-2 border-r-2 h-full flex items-center`}>
+          <div className={`w-5 h-5 rounded-[50%] ${c === color && 'border'}`} style={{
+            backgroundColor: c,
+          }}></div>
+        </div>)}
+      </div>
+      <div className="ml-2 h-full flex items-center" onClick={() => deleteFunc()}>
+        <DeleteIcon />
+      </div>
+    </div>}
+
   </div>
+
 }
 
 export default SelecTools
