@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { ReactReader } from "react-reader";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { saveSelection, selectionList } from "@/utils/selection";
 import type { Contents, Rendition } from "epubjs";
 import { useFetchBook } from '@/utils/api'
@@ -21,8 +21,10 @@ export default function Book() {
   const [paragraph, setParagraph] = useState<string>('')
   let isDraging = false
   const pathname = usePathname();
-  const file = pathname.split("/").pop() || ''
-  const { url, hash } = useFetchBook(file)
+  const searchParams = useSearchParams();
+  const file = (pathname.split("/").pop() as String).split('?')[0] || ''
+  const id = searchParams.get('id') || ''
+  const { url, hash } = useFetchBook(file, id)
   const showRef = useRef(show);
   const { theme } = useTheme(rendition)
 

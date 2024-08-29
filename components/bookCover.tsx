@@ -3,14 +3,14 @@ import ePub from "epubjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function BookCover({ url }: { url: string }) {
+export default function BookCover({ url, id }: { url: string, id: string }) {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState("");
   const router = useRouter();
 
   const openBook = async () => {
     try {
-      const book = ePub(`/api/book/${url}`, {});
+      const book = ePub(`/api/book/${url}?id=${id}`, {});
       book.loaded.metadata.then((m) => {
         setTitle(m.title);
       });
@@ -28,7 +28,7 @@ export default function BookCover({ url }: { url: string }) {
   }, []);
 
   const goBook = () => {
-    router.push(`/book/${url}`)
+    router.push(`/book/${url}?id=${id}`)
   }
 
   return (
@@ -41,7 +41,7 @@ export default function BookCover({ url }: { url: string }) {
     >
       <CardBody className="overflow-visible p-0">
         <Image
-          alt="Woman listing to music"
+          alt="image"
           className="object-cover"
           height={200}
           src={cover}

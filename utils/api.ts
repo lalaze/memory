@@ -20,13 +20,13 @@ export const fetchWrapper = async (url: string, options = {}) => {
   }
 };
 
-export const useFetchBook = (bookName: string, dependencies = []) => {
+export const useFetchBook = (bookName: string, id: string, dependencies = []) => {
   const [url, setUrl] = useState('');
   const [hash, setHash] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`/api/book/${bookName}`)
+      const res = await fetch(`/api/book/${bookName}?id=${id}`)
       const h = String(res.headers.get('Hash'))
       const localUrl = URL.createObjectURL(await res.blob());
       setUrl(localUrl)

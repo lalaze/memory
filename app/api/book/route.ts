@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
     success: true,
     data: list.map((item: any) => {
       return {
+        id: String(item._id),
         name: item.filename
       }
     }),
