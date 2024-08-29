@@ -94,7 +94,7 @@ const Nav = () => {
           <NavbarItem>
             <Link
               color={pathname === "/books" ? "primary" : "foreground"}
-              href="/book"
+              href="/books"
             >
               Books
             </Link>
