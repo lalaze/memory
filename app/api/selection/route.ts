@@ -59,6 +59,13 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   await dbConnect();
   const body = await req.json()
+
+  if (body.id) {
+    return NextResponse.json({
+      success: false
+    })
+  }
+
   await selection.findByIdAndUpdate({ _id: new mongoose.Types.ObjectId(body.id)}, {
     cfi: body.cfi,
     cfiBase: body.cfiBase,
@@ -74,3 +81,21 @@ export async function PUT(req: NextRequest) {
   });
 }
 
+export async function DELETE(req: NextRequest) {
+  await dbConnect()
+
+  const { searchParams } = new URL(req.url)
+  const id = String(searchParams.get('id'))
+
+  if (!id) {
+    return NextResponse.json({
+      success: false
+    })
+  }
+
+  await selection.deleteOne({ _id: new mongoose.Types.ObjectId(id) })
+
+  return NextResponse.json({
+    success: true
+  });
+}

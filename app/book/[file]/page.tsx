@@ -24,7 +24,7 @@ export default function Book() {
   const file = pathname.split("/").pop() || ''
   const { url, hash } = useFetchBook(file)
   const showRef = useRef(show);
-  const { sState, setState } = useTools(showRef.current, rendition)
+  const { sState, setState, deleteFunc } = useTools(showRef.current, setShow, rendition)
   const { theme } = useTheme(rendition)
 
   const changeSelecetionsTool = () => {
@@ -146,7 +146,6 @@ export default function Book() {
   }
 
   const clickOpen = (e: MouseEvent, cfiRange: string) => {
-    console.log('zeze', showRef)
     const s = selections.filter((item) => item.cfi === cfiRange)[0]
     setState({
       x: sState.x,
@@ -156,9 +155,10 @@ export default function Book() {
     setShow(true)
   }
 
+
   return (
     <div className="h-full relative">
-      {show && <SelecTools key="selection" x={sState.x} y={sState.y}></SelecTools>}
+      {show && <SelecTools key="selection" x={sState.x} y={sState.y} deleteFunc={deleteFunc}></SelecTools>}
       <ReactReader
         url={bookUrl}
         location={location}

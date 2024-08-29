@@ -59,6 +59,15 @@ export const updateSelection = async (id: string, obj: Selection) => {
   })
 }
 
+export const deleteSelection = async (id: string) => {
+  console.log('zeze d')
+  const res = await fetchWrapper(`/api/selection?id=${id}`, {
+    method: 'DELETE'
+  })
+
+  return res.success
+}
+
 export const selectionList = async (bookName: string, cfiBase: string) => {
   const res = await fetchWrapper(`/api/selection?bookName=${bookName}&cfiBase=${cfiBase}`)
 

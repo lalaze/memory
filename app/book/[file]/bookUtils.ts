@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { selectToolsStateAtom } from "@/store/index";
 import { saveSelection, updateSelection } from "@/utils/selection";
 import { useAtom } from "jotai";
+import { deleteSelection } from "@/utils/selection"
+import showToast from "@/components/toast"
 
 type ITheme = "light" | "dark";
 
@@ -35,7 +37,7 @@ export const useTheme = (rendition: Rendition | undefined, dependencies = []) =>
   return { theme }
 }
 
-export const useTools = (show: boolean, rendition: Rendition | undefined, dependencies = []) => {
+export const useTools = (show: boolean, setShow: Function, rendition: Rendition | undefined, dependencies = []) => {
   const [sState, setState] = useAtom(selectToolsStateAtom);
 
   useEffect(() => {
@@ -55,5 +57,16 @@ export const useTools = (show: boolean, rendition: Rendition | undefined, depend
     }
   }, [sState.color])
 
-  return { sState, setState }
+  const deleteFunc = async () => {
+    const res = await deleteSelection(sState.id)
+    if (res && rendition) {
+      showToast('delete success', 'success')
+      rendition.annotations.remove(sState.cfi, 'highlight')
+      setShow(false)
+    } else {
+      showToast('delete error', 'error')
+    }
+  }
+
+  return { sState, setState, deleteFunc }
 }
