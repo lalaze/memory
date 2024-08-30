@@ -23,8 +23,8 @@ export default function Book() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const file = (pathname.split("/").pop() as String).split('?')[0] || ''
-  const id = searchParams.get('id') || ''
-  const { url, hash } = useFetchBook(file, id)
+  const bookId = searchParams.get('bookId') || ''
+  const { url, hash } = useFetchBook(file, bookId)
   const showRef = useRef(show);
   const { theme } = useTheme(rendition)
 
@@ -70,7 +70,7 @@ export default function Book() {
   }, [url, hash]);
 
   const initS = async () => {
-    const data: SelectionList[] = await selectionList(file, paragraph)
+    const data: SelectionList[] = await selectionList(file, paragraph, bookId)
     setSelections(data)
     setCfi(data.map((item: any) => item))
   }
@@ -114,7 +114,7 @@ export default function Book() {
       );
       const selection = contents.window.getSelection();
       selection?.removeAllRanges();
-      const res = await saveSelection(file, cfiRange, sState.color, [], '', text)
+      const res = await saveSelection(file, cfiRange, sState.color, [], '', text, bookId)
       setState({
         ...sState,
         ...res

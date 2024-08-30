@@ -16,6 +16,7 @@ export type SelectionList = Selection & {
 
 type SelectionD = Document & Selection & {
   email: string;
+  bookId: string;
 }
 
 const SelectionSchema = new Schema<SelectionD>({
@@ -39,10 +40,15 @@ const SelectionSchema = new Schema<SelectionD>({
     index: true,
     required: [true, "text is required"]
   },
-  bookName: {
+  bookId: {
     type: String,
     index: true,
     required: [true, "bookId is required"]
+  },
+  bookName: {
+    type: String,
+    index: true,
+    required: [true, "bookName is required"]
   },
   color: {
     type: String,

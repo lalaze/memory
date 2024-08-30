@@ -41,7 +41,7 @@ const SelecTools = ({ x, y, deleteFunc }: { x: number, y: number, deleteFunc: Fu
       </div>
       <div className=" flex justify-around items-center h-full">
         {selectColorsList.map((c, i) => <div onClick={() => changeColor(c)} key={c} className={`px-2 border-r-2 h-full flex items-center`}>
-          <div className={`w-5 h-5 rounded-[50%] ${c === color && 'border'}`} style={{
+          <div className={`w-5 h-5 rounded-[50%] ${c === color && `border translate-y-[-1px]`}`} style={{
             backgroundColor: c,
           }}></div>
         </div>)}

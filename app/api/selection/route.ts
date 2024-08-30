@@ -9,10 +9,12 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const bookName = searchParams.get('bookName')
   const cfiBase = searchParams.get('cfiBase')
+  const bookId = searchParams.get('bookId')
   const list = await selection.find({
     email: req.headers.get('email'),
     bookName,
-    cfiBase
+    cfiBase,
+    bookId
   })
 
   const res = list.map((item) => {
@@ -45,7 +47,8 @@ export async function POST(req: NextRequest) {
     color: body.color,
     content: body.content,
     tags: body.tags,
-    text: body.text
+    text: body.text,
+    bookId: body.bookId
   })
 
   const res = await s.save()

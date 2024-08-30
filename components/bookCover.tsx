@@ -3,14 +3,14 @@ import ePub from "epubjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function BookCover({ url, id }: { url: string, id: string }) {
+export default function BookCover({ url, bookId }: { url: string, bookId: string }) {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState("");
   const router = useRouter();
 
   const openBook = async () => {
     try {
-      const book = ePub(`/api/book/${url}?id=${id}`, {});
+      const book = ePub(`/api/book/${url}?id=${bookId}`, {});
       book.loaded.metadata.then((m) => {
         setTitle(m.title);
       });
@@ -28,7 +28,7 @@ export default function BookCover({ url, id }: { url: string, id: string }) {
   }, []);
 
   const goBook = () => {
-    router.push(`/book/${url}?id=${id}`)
+    router.push(`/book/${url}?bookId=${bookId}`)
   }
 
   return (

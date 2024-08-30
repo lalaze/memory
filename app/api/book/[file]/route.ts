@@ -36,8 +36,6 @@ export async function GET(req: NextRequest) {
 
   const f = files[0];
 
-  console.log(f)
-
   const stream = bucket.openDownloadStreamByName(f.filename);
 
   return new NextResponse(stream, {
