@@ -101,7 +101,7 @@ const Nav = () => {
           </NavbarItem>
           <NavbarItem isActive>
             <Link
-              href="#"
+              href="/notes"
               color={pathname === "/notes" ? "primary" : "foreground"}
             >
               Notes

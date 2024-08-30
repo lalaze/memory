@@ -3,7 +3,7 @@ import ePub from "epubjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function BookCover({ url, bookId }: { url: string, bookId: string }) {
+export default function BookCover({ url, bookId, target }: { url: string, bookId: string, target: string }) {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState("");
   const router = useRouter();
@@ -28,7 +28,11 @@ export default function BookCover({ url, bookId }: { url: string, bookId: string
   }, []);
 
   const goBook = () => {
-    router.push(`/book/${url}?bookId=${bookId}`)
+    if (target === 'note') {
+      router.push(`/note?bookId=${bookId}`)
+    } else {
+      router.push(`/book/${url}?bookId=${bookId}`)
+    }
   }
 
   return (
