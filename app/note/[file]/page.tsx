@@ -32,7 +32,6 @@ export default function Note() {
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
     if (scrollTop + clientHeight >= scrollHeight && !end) {
-      console.log('Scrolled to bottom!')
       fetchSelections()
     }
   }
