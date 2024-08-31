@@ -56,8 +56,9 @@ export default function Book() {
     if (isDraging) {
       isDraging = false
     }
-    sState.x = e.offsetX
-    sState.y = e.clientY
+    sState.x = e.x
+    sState.y = e.y
+    console.log('zeze', e, sState)
     setState(sState)
   }
 

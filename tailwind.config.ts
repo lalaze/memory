@@ -28,6 +28,9 @@ const config: Config = {
       },
       colors: {
         ...selectColors
+      },
+      screens: {
+        'xl': '1500px',
       }
     },
   },

@@ -10,12 +10,32 @@ export async function GET(req: NextRequest) {
   const bookName = searchParams.get('bookName')
   const cfiBase = searchParams.get('cfiBase')
   const bookId = searchParams.get('bookId')
-  const list = await selection.find({
-    email: req.headers.get('email'),
-    bookName,
-    cfiBase,
-    bookId
-  })
+  const offset = Number(searchParams.get('offset'))
+  const limit = Number(searchParams.get('limit'))
+
+  let list = []
+  let totalCount = 0
+  if (cfiBase) {
+    list = await selection.find({
+      email: req.headers.get('email'),
+      bookName,
+      cfiBase,
+      bookId
+    })
+  }
+
+  if (limit) {
+    list = await selection.find({
+      email: req.headers.get('email'),
+      bookName,
+      bookId
+    }).skip(offset).limit(limit)
+    totalCount = await selection.countDocuments({
+      email: req.headers.get('email'),
+      bookName,
+      bookId
+    });
+  }
 
   const res = list.map((item) => {
     return {
@@ -25,9 +45,18 @@ export async function GET(req: NextRequest) {
       color: item.color,
       content: item.content,
       tags: item.tags,
-      id: item._id
+      id: item._id,
+      text: item.text
     }
   })
+
+  if (limit) {
+    return NextResponse.json({
+      success: true,
+      data: res,
+      total: totalCount
+    });
+  }
 
   return NextResponse.json({
     success: true,
@@ -69,7 +98,7 @@ export async function PUT(req: NextRequest) {
     })
   }
 
-  await selection.findByIdAndUpdate({ _id: new mongoose.Types.ObjectId(body.id)}, {
+  await selection.findByIdAndUpdate({ _id: new mongoose.Types.ObjectId(body.id) }, {
     cfi: body.cfi,
     cfiBase: body.cfiBase,
     bookName: body.bookName,

@@ -29,7 +29,7 @@ export default function BookCover({ url, bookId, target }: { url: string, bookId
 
   const goBook = () => {
     if (target === 'note') {
-      router.push(`/note?bookId=${bookId}`)
+      router.push(`/note/${url}?bookId=${bookId}`)
     } else {
       router.push(`/book/${url}?bookId=${bookId}`)
     }

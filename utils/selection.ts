@@ -80,3 +80,19 @@ export const selectionList = async (bookName: string, cfiBase: string, bookId: s
     return res.data
   }
 }
+
+export const selectionListOffset = async (bookName: string, bookId: string, offset: number, limit = 100) => {
+  const res = await fetchWrapper(`/api/selection?bookName=${bookName}&bookId=${bookId}&offset=${offset}&limit=${limit}`)
+
+  if (res.success) {
+    return {
+      data: res.data,
+      total: res.total
+    }
+  }
+  return {
+    data: [],
+    total: 0
+  }
+}
+

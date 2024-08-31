@@ -28,7 +28,7 @@ export default function BooksList({ target }: { target: string }) {
   }, []);
 
   const changePage = async (e: number) => {
-    setOffset(e);
+    setOffset(e * 10);
     fetchData();
   };
 
