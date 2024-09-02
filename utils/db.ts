@@ -28,7 +28,7 @@ async function dbConnect() {
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       return {
         client: mongoose,
-        bucket: new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+        bucket: new mongoose.mongo.GridFSBucket((mongoose.connection.db as any), {
           bucketName: 'uploads',
         }),
       };
