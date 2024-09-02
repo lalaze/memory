@@ -2,9 +2,9 @@
 
 <h3 align="center"><img width="756" style="border-radius:5px;" alt="demo" src="screen_shot.png"></h3>
 
-## memory card
+## Reading
 
-Remembering things through the Ebbinghaus curve
+Reading book by note
 
 ## Getting Started
 
