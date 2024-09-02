@@ -11,8 +11,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Memory Card",
-  description: "Remembering things through the Ebbinghaus curve",
+  title: "Reading",
+  description: "Reading Book",
 };
 
 export default async function RootLayout({

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const existFile = await filesCollection.findOne({
     _id: new mongoose.Types.ObjectId(id),
     filename: file,
-    'metadata.email': email
+    'metadata.email': { $in: [email, '*'] }
   })
 
   if (!existFile) {
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     .find({
       _id: new mongoose.Types.ObjectId(id),
       filename: file,
-      'metadata.email': email
+      'metadata.email': { $in: [email, '*'] }
     })
     .toArray();
 

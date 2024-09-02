@@ -11,7 +11,7 @@ export default async function SignInPage() {
       <div className="h-dvh z-20 flex w-full items-center justify-center md:ml-[15%] md:w-[22rem]">
         <div className="flex flex-col justify-center items-center w-80 text-xl">
           <h2 className="flex items-center mb-4 space-x-2 text-3xl font-light text-zinc-600">
-            <span className="text-4xl font-medium text-white">Memory Card</span>
+            <span className="text-4xl font-medium text-white">Reading</span>
           </h2>
           <div className="flex flex-col gap-2 p-6 m-8 w-full bg-white rounded shadow-lg">
             {Object.values(providerMap).map((provider) => (

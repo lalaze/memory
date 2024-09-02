@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const totalCount = await filesCollection.countDocuments({ 'metadata.email': req.headers.get('email') });
 
   const list = await filesCollection.find({
-    'metadata.email': req.headers.get('email')
+    'metadata.email': { $in: [req.headers.get('email'), '*'] }
   }).skip(offset).limit(limit).toArray()
 
   return NextResponse.json({
@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
 
       const existFile = await filesCollection.findOne({
         filename: book,
+        email,
         'metadata.hash': hash
       })
 

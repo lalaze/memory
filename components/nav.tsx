@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchIcon, UploadIcon } from "./icon";
+import { SearchIcon, UploadIcon, BookIcon } from "./icon";
 import { signOut } from "next-auth/react";
 import { fetchWrapper } from "@/utils/api";
 import { useRouter, usePathname } from "next/navigation";
@@ -84,11 +84,13 @@ const Nav = () => {
   };
 
   return (
-    <Navbar isBordered maxWidth={"full"} className="px-12">
+    <Navbar isBordered maxWidth={"full"} className="px-12 pl-6">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-          {/* <AcmeLogo /> */}
-          <p className="hidden sm:block font-bold text-inherit">Memory</p>
+          <div className="mr-4">
+            <BookIcon />
+          </div>
+          <p className="hidden sm:block font-bold text-inherit">Reading</p>
         </NavbarBrand>
         <NavbarContent className="hidden sm:flex gap-3">
           <NavbarItem>
